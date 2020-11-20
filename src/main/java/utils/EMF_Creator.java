@@ -35,7 +35,7 @@ public class EMF_Creator {
         boolean isDeployed = (System.getenv("DEPLOYED") != null);
         if (isDeployed) {
             /* Strategy for deployment */
-            String connection_str = System.getenv("CA3_CONNECTION_STR");
+            String connection_str = System.getenv("CONNECTION_STR");
 
             System.out.println("USING ENVIRONMENT VARIABLES");
             System.out.println("DEPLOYED       -->" + System.getenv("DEPLOYED"));

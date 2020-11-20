@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>startcode3sem</groupId>
-    <artifactId>startcode3sem</artifactId>
+    <groupId>SYS-Backend</groupId>
+    <artifactId>SYS</artifactId>
     <version>1.0.1</version>
     <packaging>war</packaging>
 
-    <name>startcode3sem</name>
+    <name>SYS-Backend</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -16,7 +16,7 @@
         <!-- TODO: Add the URL to your own tomcat server. Used to deploy your WAR-file -->
         <!-- IMPORTANT-1: If your server uses https (via NGINX) use your DOMAIN NAME and https below: -->
         <!-- IMPORTANT-2: Observe we are NOT using /manager/html but /manager/text for script uploads --> 
-        <remote.server>http://selself.com/manager/text</remote.server>
+        <remote.server>https://dgpcoding.com/manager/text</remote.server>
         
     </properties>
     
