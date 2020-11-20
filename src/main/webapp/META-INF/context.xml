@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<Context path="/jpareststarter"/>-->
+<Context path="/startcode3sem">
+    
+    
+<!--    <Resource name="jdbc/DATABASE1"
+             driverClassName="com.mysql.cj.jdbc.Driver"
+             auth="Container"
+             url="${CONNECTION_STR}"
+             username="${USER}"
+             password="${PW}"
+             type="javax.sql.DataSource"
+             maxActive="20"
+             maxIdle="5"
+             maxWait="10000"/>-->
+</Context>

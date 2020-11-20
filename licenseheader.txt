@@ -1,0 +1,7 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}CA3
+<#if licenseLast??>
+${licenseLast}
+</#if>
