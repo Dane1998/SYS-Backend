@@ -15,6 +15,7 @@ public class HttpUtils {
         //con.setRequestProperty("Accept", "application/json;charset=UTF-8");
         con.setRequestProperty("Accept", "application/json");
         con.setRequestProperty("User-Agent", "server");
+        
 
         Scanner scan = new Scanner(con.getInputStream());
         String jsonStr = null;
