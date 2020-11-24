@@ -15,12 +15,9 @@ import org.junit.jupiter.api.Test;
 public class FlightFetcherTest {
 
     private static FlightFetcher ff = new FlightFetcher();
-    @Test
-    public void airportsFetchTest() throws IOException {
-        //  FlightFetcher ff = new FlightFetcher();
-        //  System.out.println(ff.getAirports("http://api.aviationstack.com/v1", 10, 20, "f0db19fb49cae5b7349fd4cc157b47e3&limit=10&offset=28"));
-    }
+    
 
+    @Disabled
     @Test
     public void getListOfAirports() throws IOException {
         
