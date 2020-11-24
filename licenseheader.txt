@@ -1,7 +1,7 @@
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>
-${licensePrefix}CA3
+${licensePrefix}Gruppe 3 SYS
 <#if licenseLast??>
 ${licenseLast}
 </#if>

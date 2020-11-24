@@ -223,16 +223,6 @@ public class LoginEndpointTest {
                 .body("message", equalTo("Not authenticated - do login"));
     }
 
-    @Test
-    public void testGetDemoPackage() {
-        given()
-                .contentType("application/json")
-                .when()
-                .get("/info/demoPackage").then()
-                .assertThat()
-                .statusCode(200)
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("carName", equalTo("cerulean"));
-    }
+    
 
 }

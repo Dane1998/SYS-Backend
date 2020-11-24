@@ -82,7 +82,7 @@ public class FlightFetcher {
 
     public ArrayList<AirportDTO> fakeAirports() {
         ArrayList<AirportDTO> fake = new ArrayList<>();
-
+        System.out.println("In fake");
         for (int i = 0; i < 100; i++) {
             String countryName = "";
             String airportName = "";
@@ -111,6 +111,7 @@ public class FlightFetcher {
             AirportDTO airport = new AirportDTO(airportName, airportCode, countryName, citiCode);
             fake.add(airport);
         }
+        System.out.println("Just before return");
         return fake;
     }
 
