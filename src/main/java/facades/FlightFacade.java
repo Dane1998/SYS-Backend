@@ -17,15 +17,15 @@ import utils.EMF_Creator;
  */
 public class FlightFacade {
 
-    private  EntityManagerFactory emf;
-    private  FlightFacade instance;
+    private static EntityManagerFactory emf;
+    private static FlightFacade instance;
     private  FlightFetcher fetcher = new FlightFetcher();
 
     private FlightFacade() {
 
     }
 
-    public  FlightFacade getFlightFacade(EntityManagerFactory _emf) {
+    public static FlightFacade getFlightFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
             instance = new FlightFacade();
