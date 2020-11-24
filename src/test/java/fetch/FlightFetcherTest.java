@@ -41,14 +41,8 @@ public class FlightFetcherTest {
         System.out.println(list.size());
     }
 
-    @Test
-    public void printTheFakeList() {
-
-        for (AirportDTO a : ff.fakeAirports()) {
-            System.out.println(a.toString());
-        }
-
-    }
+   
+    
     @Disabled
     @Test
     public void get100CitiesTest() throws IOException {
