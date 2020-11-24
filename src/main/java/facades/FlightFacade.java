@@ -21,7 +21,7 @@ public class FlightFacade {
 
     private static EntityManagerFactory emf;
     private static FlightFacade instance;
-    private  FlightFetcher fetcher = new FlightFetcher();
+    private FlightFetcher fetcher = new FlightFetcher();
 
     private FlightFacade() {
 
@@ -35,27 +35,39 @@ public class FlightFacade {
         return instance;
     }
 
-    
-    
     /*
     returns list of FrontAirportDTO
-    */
-    public ArrayList<FrontAirportDTO> allAirports(){
+     */
+    public ArrayList<FrontAirportDTO> allAirports() {
         ArrayList<FrontAirportDTO> all = new ArrayList();
-         emf = EMF_Creator.createEntityManagerFactory();
+        emf = EMF_Creator.createEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
-        try{
+        try {
+            em.getTransaction().begin();
+            List<Object[]> results = em.createQuery("SELECT a.id, a.name, a.iata_code, a.country_name, c.city_name, a.latitude, a.longitude   from Airport a JOIN City c ON a.city_iata_code = c.iata_code").getResultList();
             
-        }finally{
+           
+            for (Object[] result : results) {
+                
+                int id = (int) result[0];
+                String name = (String) result[1];
+                String code = (String) result[2];
+                String country = (String) result[3];
+                String city = (String) result[4];
+                double latitude = (double) result[5];
+                double longitude = (double) result[6];
+                FrontAirportDTO airport = new FrontAirportDTO(id, name, code, country, city, latitude, longitude);
+                all.add(airport);
+
+            }
+        } finally {
             em.close();
         }
-        
-        
+
         return all;
     }
-    
-    
-    public  String populateAirports() throws IOException {
+
+    public String populateAirports() throws IOException {
         String msg = "Not persisted maaaaan";
         ArrayList<AirportDTO> allAirportsDTO = fetcher.allAirports();
         emf = EMF_Creator.createEntityManagerFactory();
@@ -77,19 +89,16 @@ public class FlightFacade {
         return msg;
     }
 
-   
-    
-    public  String populateCities() throws IOException {
-        String msg ="Not populated";
+    public String populateCities() throws IOException {
+        String msg = "Not populated";
         ArrayList<CityDTO> allCities = fetcher.allCities();
-        System.out.println("in populatecieties");
-        
+
         emf = EMF_Creator.createEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
         int count = 0;
         try {
             for (CityDTO ctDTO : allCities) {
-                City ct  = new City(ctDTO);
+                City ct = new City(ctDTO);
                 em.getTransaction().begin();
                 em.persist(ct);
                 count++;
@@ -99,8 +108,7 @@ public class FlightFacade {
         } finally {
             em.close();
         }
-        
-        
+
         return msg;
     }
 

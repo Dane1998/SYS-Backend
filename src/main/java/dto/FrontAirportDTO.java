@@ -8,55 +8,30 @@ package dto;
  * @author magda
  */
 public class FrontAirportDTO {
-    
+
+    private int id;
     private String name;
     private String code;
     private String country;
     private String city;
+    private double latitude;
+    private double longitude;
 
-    public FrontAirportDTO(String name, String code, String country, String city) {
+    public FrontAirportDTO(int id, String name, String code, String country, String city, double latitude, double longitude) {
+        this.id = id;
         this.name = name;
         this.code = code;
         this.country = country;
         this.city = city;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public FrontAirportDTO() {
+    @Override
+    public String toString() {
+        return "FrontAirportDTO{" + "id=" + id + ", name=" + name + ", code=" + code + ", country=" + country + ", city=" + city + ", latitude=" + latitude + ", longitude=" + longitude + '}';
     }
 
     
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
     
-    
-   
 }

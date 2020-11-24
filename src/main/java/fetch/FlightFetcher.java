@@ -76,8 +76,7 @@ public class FlightFetcher {
             ArrayList<AirportDTO> list = ff.getAirportList100(offset);
             allAirportsList.addAll(list);
             offset += 100;
-            System.out.println("offset: " + offset);
-            System.out.println("count: " + count);
+         
             if (offset >= total) {
                 run = false;
             }
@@ -127,52 +126,50 @@ public class FlightFetcher {
         ArrayList<CityDTO> all = new ArrayList<>();
         int total = 9368;
         int offset=0;
-        System.out.println("In allCities");
+       
         while (offset <= total){
             ArrayList<CityDTO> part = ff.get100Cities(offset);
             all.addAll(part);
             offset+=100;
-            System.out.println("In loop offset: "+offset);
         }
-        System.out.println("all cities: "+all.size());
         return all;
     }
     
     
     
 
-    public ArrayList<AirportDTO> fakeAirports() {
-        ArrayList<AirportDTO> fake = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            String countryName = "";
-            String airportName = "";
-            String airportCode = "";
-            String citiCode = "";
-
-            Random r = new Random();
-
-            String alphabet = "abcdefghijklmnopqrstuvwxyz";
-            for (int c = 0; c < 5; c++) {
-                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-                countryName += x;
-            }
-            for (int c = 0; c < 5; c++) {
-                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-                airportName += x;
-            }
-            for (int c = 0; c < 3; c++) {
-                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-                airportCode += x;
-            }
-            for (int c = 0; c < 3; c++) {
-                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-                citiCode += x;
-            }
-          ///  AirportDTO airport = new AirportDTO(airportName, airportCode, countryName, citiCode);
-           // fake.add(airport);
-        }
-        System.out.println("Just before return");
-        return fake;
-    }
+//    public ArrayList<AirportDTO> fakeAirports() {
+//        ArrayList<AirportDTO> fake = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            String countryName = "";
+//            String airportName = "";
+//            String airportCode = "";
+//            String citiCode = "";
+//
+//            Random r = new Random();
+//
+//            String alphabet = "abcdefghijklmnopqrstuvwxyz";
+//            for (int c = 0; c < 5; c++) {
+//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
+//                countryName += x;
+//            }
+//            for (int c = 0; c < 5; c++) {
+//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
+//                airportName += x;
+//            }
+//            for (int c = 0; c < 3; c++) {
+//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
+//                airportCode += x;
+//            }
+//            for (int c = 0; c < 3; c++) {
+//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
+//                citiCode += x;
+//            }
+//          ///  AirportDTO airport = new AirportDTO(airportName, airportCode, countryName, citiCode);
+//           // fake.add(airport);
+//        }
+//        System.out.println("Just before return");
+//        return fake;
+//    }
 
 }
