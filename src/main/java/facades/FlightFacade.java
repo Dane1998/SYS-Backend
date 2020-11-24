@@ -2,11 +2,13 @@ package facades;
 
 import dto.AirportDTO;
 import dto.CityDTO;
+import dto.FrontAirportDTO;
 import entities.Airport;
 import entities.City;
 import fetch.FlightFetcher;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import utils.EMF_Creator;
@@ -33,6 +35,26 @@ public class FlightFacade {
         return instance;
     }
 
+    
+    
+    /*
+    returns list of FrontAirportDTO
+    */
+    public ArrayList<FrontAirportDTO> allAirports(){
+        ArrayList<FrontAirportDTO> all = new ArrayList();
+         emf = EMF_Creator.createEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+        try{
+            
+        }finally{
+            em.close();
+        }
+        
+        
+        return all;
+    }
+    
+    
     public  String populateAirports() throws IOException {
         String msg = "Not persisted maaaaan";
         ArrayList<AirportDTO> allAirportsDTO = fetcher.allAirports();
@@ -55,10 +77,7 @@ public class FlightFacade {
         return msg;
     }
 
-    public  void main(String[] args) throws IOException {
-        System.out.println(populateCities());
-        System.out.println(populateAirports());
-    }
+   
     
     public  String populateCities() throws IOException {
         String msg ="Not populated";
