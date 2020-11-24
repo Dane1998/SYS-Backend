@@ -9,10 +9,11 @@ import java.util.ArrayList;
 
 /**
  *
- * @author magda
+ * @author magda og daniel
  */
 public class AirportListDTO {
-    ArrayList<AirportDTO> data= new ArrayList<>();
+
+    private ArrayList<AirportDTO> data = new ArrayList<>();
 
     public AirportListDTO(ArrayList<AirportDTO> data) {
         this.data = data;
@@ -21,9 +22,5 @@ public class AirportListDTO {
     public ArrayList<AirportDTO> getData() {
         return data;
     }
-    
-    
-    
-    
-    
+
 }

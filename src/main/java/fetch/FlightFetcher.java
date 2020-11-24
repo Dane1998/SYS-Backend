@@ -9,9 +9,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.AirportDTO;
 import dto.AirportListDTO;
+import dto.CityDTO;
+import dto.CityListDTO;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,15 +22,20 @@ import java.util.Scanner;
 
 /**
  *
- * @author magda daniel
+ * @author magda og daniel
  */
 public class FlightFetcher {
 
     private final String URL = "http://api.aviationstack.com/v1";
     private Gson GSON = new GsonBuilder().create();
+    
+    private static FlightFetcher ff = new FlightFetcher();
+    
+    
 
     public String getAirports(int offset) throws MalformedURLException, IOException {
-        String key = "f0db19fb49cae5b7349fd4cc157b47e3";
+       
+        String key = "7749dd3fccb2428159fdfd0710f97584";
         String keyString = "?access_key=" + key;
         String limitString = "&limit=100";
         String offsetString = "&offset=" + offset;
@@ -49,7 +57,7 @@ public class FlightFetcher {
 
     public ArrayList<AirportDTO> getAirportList100(int offset) throws IOException {
 
-        FlightFetcher ff = new FlightFetcher();
+       // FlightFetcher ff = new FlightFetcher();
         String response = ff.getAirports(offset);
         AirportListDTO list = GSON.fromJson(response, AirportListDTO.class);
         return list.getData();
@@ -57,7 +65,7 @@ public class FlightFetcher {
     }
 
     public ArrayList<AirportDTO> allAirports() throws IOException {
-        FlightFetcher ff = new FlightFetcher();
+      //  FlightFetcher ff = new FlightFetcher();
         ArrayList<AirportDTO> allAirportsList = new ArrayList<>();
         int total = 6471;
         int offset = 0;
@@ -79,10 +87,62 @@ public class FlightFetcher {
         return allAirportsList;
 
     }
+    
+    
+    
+    
+    public String getCities(int offset) throws ProtocolException, MalformedURLException, IOException{
+        String key = "7749dd3fccb2428159fdfd0710f97584";
+        String keyString = "?access_key=" + key;
+        String limitString = "&limit=100";
+        String offsetString = "&offset=" + offset;
+        
+        URL url = new URL(URL + "/cities" + keyString + limitString + offsetString);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("User-Agent", "server");
+
+        Scanner scan = new Scanner(con.getInputStream());
+        String jsonStr = null;
+        if (scan.hasNext()) {
+            jsonStr = scan.nextLine();
+        }
+        scan.close();
+        return jsonStr;
+    }
+    
+    
+
+    public ArrayList<CityDTO> get100Cities(int offset) throws IOException {
+
+        String response = ff.getCities(offset);
+        CityListDTO list = GSON.fromJson(response, CityListDTO.class);
+        return list.getData();
+
+    }
+    
+    
+    public ArrayList<CityDTO> allCities() throws IOException{
+        ArrayList<CityDTO> all = new ArrayList<>();
+        int total = 9368;
+        int offset=0;
+        System.out.println("In allCities");
+        while (offset <= total){
+            ArrayList<CityDTO> part = ff.get100Cities(offset);
+            all.addAll(part);
+            offset+=100;
+            System.out.println("In loop offset: "+offset);
+        }
+        System.out.println("all cities: "+all.size());
+        return all;
+    }
+    
+    
+    
 
     public ArrayList<AirportDTO> fakeAirports() {
         ArrayList<AirportDTO> fake = new ArrayList<>();
-        System.out.println("In fake");
         for (int i = 0; i < 100; i++) {
             String countryName = "";
             String airportName = "";
@@ -108,8 +168,8 @@ public class FlightFetcher {
                 char x = alphabet.charAt(r.nextInt(alphabet.length()));
                 citiCode += x;
             }
-            AirportDTO airport = new AirportDTO(airportName, airportCode, countryName, citiCode);
-            fake.add(airport);
+          ///  AirportDTO airport = new AirportDTO(airportName, airportCode, countryName, citiCode);
+           // fake.add(airport);
         }
         System.out.println("Just before return");
         return fake;

@@ -34,7 +34,7 @@ public class FlightResource {
     @Context
     private UriInfo context;
 
-    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+   // private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static ExecutorService threadPool = Executors.newCachedThreadPool();
     private static FlightFetcher fetcher = new FlightFetcher();
