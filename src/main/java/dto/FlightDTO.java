@@ -16,7 +16,6 @@ import dto.flightFetchResult.PaginationDTO;
  */
 public class FlightDTO {
 
-    private PaginationDTO pagination;
     private String flight_date;
     private String flight_status;
     private DepartureDTO departure;
@@ -24,8 +23,8 @@ public class FlightDTO {
     private AirlineDTO airline;
     private LiveDTO live;
 
-    public FlightDTO(PaginationDTO pagination, String flight_date, String flight_status, DepartureDTO departure, ArrivalDTO arrival, AirlineDTO airline, LiveDTO live) {
-        this.pagination = pagination;
+    public FlightDTO( String flight_date, String flight_status, DepartureDTO departure, ArrivalDTO arrival, AirlineDTO airline, LiveDTO live) {
+        
         this.flight_date = flight_date;
         this.flight_status = flight_status;
         this.departure = departure;
@@ -34,9 +33,6 @@ public class FlightDTO {
         this.live = live;
     }
 
-    public PaginationDTO getPagination() {
-        return pagination;
-    }
 
     public String getFlight_date() {
         return flight_date;

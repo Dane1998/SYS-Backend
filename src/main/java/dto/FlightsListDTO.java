@@ -3,6 +3,7 @@
  */
 package dto;
 
+import dto.flightFetchResult.PaginationDTO;
 import java.util.ArrayList;
 
 /**
@@ -10,11 +11,20 @@ import java.util.ArrayList;
  * @author magda
  */
 public class FlightsListDTO {
-    public ArrayList<FlightDTO> data ;
+    private ArrayList<FlightDTO> data ;
+        private PaginationDTO pagination;
 
-    public FlightsListDTO(ArrayList<FlightDTO> data) {
+    public FlightsListDTO(ArrayList<FlightDTO> data, PaginationDTO pagination) {
         this.data = data;
+        this.pagination = pagination;
     }
+
+    public PaginationDTO getPagination() {
+        return pagination;
+    }
+
+
+   
 
     public ArrayList<FlightDTO> getData() {
         return data;
