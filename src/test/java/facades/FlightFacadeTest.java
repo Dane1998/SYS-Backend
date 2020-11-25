@@ -17,7 +17,9 @@ import utils.EMF_Creator;
  *
  * @author magda
  */
-//@Disabled
+
+@Disabled
+
 public class FlightFacadeTest {
     
     private static EntityManagerFactory emf;

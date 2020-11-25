@@ -45,10 +45,10 @@ public class FlightFacade {
         try {
             em.getTransaction().begin();
             List<Object[]> results = em.createQuery("SELECT a.id, a.name, a.iata_code, a.country_name, c.city_name, a.latitude, a.longitude   from Airport a JOIN City c ON a.city_iata_code = c.iata_code").getResultList();
-            
+            int count=0;
            
             for (Object[] result : results) {
-                
+                count++;
                 int id = (int) result[0];
                 String name = (String) result[1];
                 String code = (String) result[2];
@@ -58,7 +58,7 @@ public class FlightFacade {
                 double longitude = (double) result[6];
                 FrontAirportDTO airport = new FrontAirportDTO(id, name, code, country, city, latitude, longitude);
                 all.add(airport);
-
+                System.out.println("count: " + count);
             }
         } finally {
             em.close();
