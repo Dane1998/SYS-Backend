@@ -28,7 +28,7 @@ public class FlightFetcherTest {
 
     }
 
-    //@Disabled
+    @Disabled
     @Test
     public void getAllAirports() throws IOException {
 
