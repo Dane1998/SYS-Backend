@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
 
 /**
  *
@@ -30,6 +31,21 @@ public class FlightFetcher {
     private Gson GSON = new GsonBuilder().create();
     
     private static FlightFetcher ff = new FlightFetcher();
+    
+    
+    
+    public  static void findFlights(Gson gson, ExecutorService threadPool ){
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 
@@ -86,6 +102,8 @@ public class FlightFetcher {
         return allAirportsList;
 
     }
+    
+    
     
     
     
