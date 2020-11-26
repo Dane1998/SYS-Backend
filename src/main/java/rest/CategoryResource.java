@@ -31,7 +31,7 @@ public class CategoryResource {
     @Path("virk")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJokes() throws IOException, TimeoutException, InterruptedException, ExecutionException{
+    public String getJCategory() throws IOException, TimeoutException, InterruptedException, ExecutionException{
         System.out.println("virker det?");
         ArrayList<CategoryDTO>  list = CategoryFetcher.getAllCategories();
         return GSON.toJson(list);

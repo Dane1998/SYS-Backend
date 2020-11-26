@@ -23,35 +23,7 @@ import java.util.Scanner;
  * @author Artem and Magda
  */
 public class CategoryFetcher {
-   // private static final String chuckNorrisAPI = "https://developers.zomato.com/api/v2.1/categories";
-    //private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-   /* public static String fetchJokes(ExecutorService es) throws TimeoutException, InterruptedException, ExecutionException {
-        long start = System.nanoTime();
-
-        Callable<CategoryDTO> catCall = new Callable<CategoryDTO>() {
-            @Override
-            public CategoryDTO call() throws Exception {
-                String chuck = HttpUtils.fetchData(chuckNorrisAPI);
-                CategoryDTO categoryDTO = GSON.fromJson(chuck, CategoryDTO.class);
-                return categoryDTO;
-            }
-        };
-
-        
-        
-         Future<CategoryDTO> chuckFuture = es.submit(catCall);
-         
-         
-         CategoryDTO chuck = chuckFuture.get(2,TimeUnit.SECONDS);
-         
-         
-         
-         CategoryDTO category = new CategoryDTO();
-         String json = GSON.toJson(category);
-                    
-        return json;
-    }*/
+   
     private static final String URL = "https://developers.zomato.com/api/v2.1/categories";
     private static Gson GSON = new GsonBuilder().create();
 
