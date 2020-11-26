@@ -53,22 +53,10 @@ public class zCityFetcher {
      public static ArrayList<zCityDTO> getCityResult () throws IOException{
         String cityString = getCities();
         LocationSugDTO fetchedCities = GSON.fromJson(cityString, LocationSugDTO.class);
-        
+         System.out.println("done");
         return fetchedCities.getCities();
         
-        
-        
-        /*System.out.println("cityString:");
-        System.out.println(cityString);
-        
-        LocationSugDTO fetchedCities = GSON.fromJson(cityString, LocationSugDTO.class);
-        
-        ArrayList<zCityDTO> allRes = new ArrayList();
-        allRes.add(fetchedCities);
-       
-                
-        
-        return allRes;*/
+   
     }
     
 }
