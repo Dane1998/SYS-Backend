@@ -75,23 +75,25 @@ public class FlightResource {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON) 
     @Consumes(MediaType.APPLICATION_JSON)
 
     @Path("findflights")
     public String findFlights(String jsonString) throws NotFoundException, API_Exception {
-        String iata;
+        String depCode;
+        String arrCode;
         String date;
 
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-            iata = json.get("dep_iata").getAsString();
-            date = json.get("dep_date").getAsString();
+            depCode = json.get("dep_code").getAsString();
+            arrCode = json.get("arr_code").getAsString();
+            date = json.get("date").getAsString();
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-
-        return GSON.toJson(fetcher.findFlights(GSON, threadPool, iata, date));
+        System.out.println("1: dep: "+depCode+", arr: "+arrCode+" date: "+date);
+        return GSON.toJson(fetcher.findFlights(GSON, threadPool, depCode, arrCode, date));
     }
 
 }

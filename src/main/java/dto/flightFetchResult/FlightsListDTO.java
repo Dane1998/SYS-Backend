@@ -1,8 +1,9 @@
 /*
  * Gruppe 3 SYS
  */
-package dto;
+package dto.flightFetchResult;
 
+import dto.FlightDTO;
 import dto.flightFetchResult.PaginationDTO;
 import java.util.ArrayList;
 

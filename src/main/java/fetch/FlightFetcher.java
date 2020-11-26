@@ -12,22 +12,20 @@ import dto.AirportListDTO;
 import dto.CityDTO;
 import dto.CityListDTO;
 import dto.FlightDTO;
-import dto.FlightsListDTO;
+import dto.flightFetchResult.FlightsListDTO;
 import errorhandling.NotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.HttpUtils;
@@ -43,8 +41,8 @@ public class FlightFetcher {
 
     private static FlightFetcher ff = new FlightFetcher();
 
-    public  ArrayList<FlightDTO> findFlights(Gson gson, ExecutorService threadPool, String iata, String date) throws NotFoundException {
-        System.out.println("In findFlights");
+    public ArrayList<FlightDTO> findFlights(Gson gson, ExecutorService threadPool, String dep_iata, String arr_iata, String date) throws NotFoundException {
+
         Callable<ArrayList<FlightDTO>> flightsTask = new Callable<ArrayList<FlightDTO>>() {
             @Override
             public ArrayList<FlightDTO> call() throws Exception {
@@ -54,12 +52,18 @@ public class FlightFetcher {
                 FlightsListDTO list;
                 ArrayList<FlightDTO> all = new ArrayList();
                 while (offset <= total) {
-                    results = callForFetch(offset, iata, date);
+                    System.out.println("2:   date: "+date);
+                    results = callForFetch(offset, dep_iata, arr_iata, date);
                     list = GSON.fromJson(results, FlightsListDTO.class);
                     all.addAll(list.getData());
                     total = list.getPagination().getTotal();
                     offset += 100;
-                    System.out.println("offset: "+offset+" results: "+ all.size());
+                    System.out.println("offset: " + offset + " results: " + all.size());
+                    
+                }
+                //set the real date back on flights
+                for (FlightDTO flightDTO : all) {
+                    flightDTO.setFlight_date(date);
                 }
                 return all;
             }
@@ -78,149 +82,41 @@ public class FlightFetcher {
         return result;
     }
 
-    public static String callForFetch(int offset, String dep_iata, String date) throws IOException {
+    public static String callForFetch(int offset, String dep_iata, String arr_iata, String date) throws IOException, NotFoundException {
         String key = "7749dd3fccb2428159fdfd0710f97584";
         String keyString = "?access_key=" + key;
         String limitString = "&limit=100";
         String offsetString = "&offset=" + offset;
         String statusString = "&flight_status=scheduled";
-        String dep_iataString ="&dep_iata="+dep_iata;
-        String dateString = "&flight_date="+date; // When we can use that option we need to add this string to the URL like the other strings
-        String _url = URL + "/flights" + keyString + limitString + offsetString + statusString+dep_iataString;
-        System.out.println("URL to fetch: "+ _url);
-        return HttpUtils.fetchData(_url);
+        String dep_iataString = "&dep_iata=" + dep_iata;
+        String arr_iataString = "&arr_iata=" + arr_iata;
+        String dateString = "&flight_date=" + realDateToAvailableDate(date); // When we can use that option we need to add this string to the URL like the other strings
+        String _url = URL + "/flights" + keyString + limitString + offsetString + statusString + dep_iataString + arr_iataString;
+        String dataString = HttpUtils.fetchData(_url);
+
+        return dataString;
     }
-    
-    
-    
 
-    public String getAirports(int offset) throws MalformedURLException, IOException {
+    public static String realDateToAvailableDate(String realDateString) throws NotFoundException {
 
-        String key = "7749dd3fccb2428159fdfd0710f97584";
-        String keyString = "?access_key=" + key;
-        String limitString = "&limit=100";
-        String offsetString = "&offset=" + offset;
+        LocalDate realDate = LocalDate.parse(realDateString);
+        LocalDate availableDate;
+        LocalDate now = LocalDate.now();
+        if (realDate.isBefore(now)) {
+            throw new NotFoundException("No flights available for given date");
+        } else if (realDate.isBefore(now.plusMonths(3))) {
+            availableDate = realDate.minusMonths(3);
+        } else if (realDate.isBefore(now.plusMonths(6))) {
+            availableDate = realDate.minusMonths(6);
+        } else if (realDate.isBefore(now.plusMonths(9))) {
+            availableDate = realDate.minusMonths(9);
+        } else if (realDate.isBefore(now.plusMonths(12))) {
+            availableDate = realDate.minusMonths(12);
+        } else {
+            throw new NotFoundException("No flights available for given date");
 
-        URL url = new URL(URL + "/airports" + keyString + limitString + offsetString);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json");
-        con.setRequestProperty("User-Agent", "server");
-
-        Scanner scan = new Scanner(con.getInputStream());
-        String jsonStr = null;
-        if (scan.hasNext()) {
-            jsonStr = scan.nextLine();
         }
-        scan.close();
-        return jsonStr;
+        return availableDate.toString();
     }
 
-    public ArrayList<AirportDTO> getAirportList100(int offset) throws IOException {
-
-        // FlightFetcher ff = new FlightFetcher();
-        String response = ff.getAirports(offset);
-        AirportListDTO list = GSON.fromJson(response, AirportListDTO.class);
-        return list.getData();
-
-    }
-
-    public ArrayList<AirportDTO> allAirports() throws IOException {
-        //  FlightFetcher ff = new FlightFetcher();
-        ArrayList<AirportDTO> allAirportsList = new ArrayList<>();
-        int total = 6471;
-        int offset = 0;
-        boolean run = true;
-        int count = 0;
-
-        while (run) {
-            ArrayList<AirportDTO> list = ff.getAirportList100(offset);
-            allAirportsList.addAll(list);
-            offset += 100;
-
-            if (offset >= total) {
-                run = false;
-            }
-            count += 1;
-        }
-
-        return allAirportsList;
-
-    }
-
-    public String getCities(int offset) throws ProtocolException, MalformedURLException, IOException {
-        String key = "7749dd3fccb2428159fdfd0710f97584";
-        String keyString = "?access_key=" + key;
-        String limitString = "&limit=100";
-        String offsetString = "&offset=" + offset;
-
-        URL url = new URL(URL + "/cities" + keyString + limitString + offsetString);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json");
-        con.setRequestProperty("User-Agent", "server");
-
-        Scanner scan = new Scanner(con.getInputStream());
-        String jsonStr = null;
-        if (scan.hasNext()) {
-            jsonStr = scan.nextLine();
-        }
-        scan.close();
-        return jsonStr;
-    }
-
-    public ArrayList<CityDTO> get100Cities(int offset) throws IOException {
-
-        String response = ff.getCities(offset);
-        CityListDTO list = GSON.fromJson(response, CityListDTO.class);
-        return list.getData();
-
-    }
-
-    public ArrayList<CityDTO> allCities() throws IOException {
-        ArrayList<CityDTO> all = new ArrayList<>();
-        int total = 9368;
-        int offset = 0;
-
-        while (offset <= total) {
-            ArrayList<CityDTO> part = ff.get100Cities(offset);
-            all.addAll(part);
-            offset += 100;
-        }
-        return all;
-    }
-
-//    public ArrayList<AirportDTO> fakeAirports() {
-//        ArrayList<AirportDTO> fake = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            String countryName = "";
-//            String airportName = "";
-//            String airportCode = "";
-//            String citiCode = "";
-//
-//            Random r = new Random();
-//
-//            String alphabet = "abcdefghijklmnopqrstuvwxyz";
-//            for (int c = 0; c < 5; c++) {
-//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-//                countryName += x;
-//            }
-//            for (int c = 0; c < 5; c++) {
-//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-//                airportName += x;
-//            }
-//            for (int c = 0; c < 3; c++) {
-//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-//                airportCode += x;
-//            }
-//            for (int c = 0; c < 3; c++) {
-//                char x = alphabet.charAt(r.nextInt(alphabet.length()));
-//                citiCode += x;
-//            }
-//          ///  AirportDTO airport = new AirportDTO(airportName, airportCode, countryName, citiCode);
-//           // fake.add(airport);
-//        }
-//        System.out.println("Just before return");
-//        return fake;
-//    }
 }
