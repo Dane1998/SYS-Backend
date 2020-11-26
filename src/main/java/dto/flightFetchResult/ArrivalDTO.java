@@ -3,6 +3,8 @@
  */
 package dto.flightFetchResult;
 
+import java.time.ZonedDateTime;
+
 /**
  *
  * @author magda
@@ -13,13 +15,12 @@ public class ArrivalDTO {
     private String terminal;
     private String gate;
     private String iata;
+    private String scheduled;
 
-    public ArrivalDTO(String airport, String terminal, String gate, String iata) {
-        this.airport = airport;
-        this.terminal = terminal;
-        this.gate = gate;
-        this.iata = iata;
+    public ArrivalDTO(){
     }
+
+   
 
     public String getAirport() {
         return airport;
@@ -35,6 +36,10 @@ public class ArrivalDTO {
 
     public String getIata() {
         return iata;
+    }
+
+    public String getScheduled() {
+        return scheduled;
     }
     
 

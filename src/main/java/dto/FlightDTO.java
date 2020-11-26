@@ -7,7 +7,6 @@ import dto.flightFetchResult.AirlineDTO;
 import dto.flightFetchResult.ArrivalDTO;
 import dto.flightFetchResult.DepartureDTO;
 import dto.flightFetchResult.LiveDTO;
-import dto.flightFetchResult.PaginationDTO;
 
 
 /**
@@ -57,6 +56,11 @@ public class FlightDTO {
     public LiveDTO getLive() {
         return live;
     }
+
+    public void setFlight_date(String flight_date) {
+        this.flight_date = flight_date;
+    }
+    
     
     
     
