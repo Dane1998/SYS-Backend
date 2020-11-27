@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.PopulateDB;
-import utils.SetupUsers;
 
 /**
  *
