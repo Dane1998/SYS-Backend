@@ -2,7 +2,6 @@ package fetch;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.tools.doclint.Entity;
 import dto.RestaurantDTO;
 import dto.RestaurantListDTO;
 import dto.dto.RestaurantFetchResult.RestaurantKeeperDTO;

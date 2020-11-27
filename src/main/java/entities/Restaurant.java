@@ -64,7 +64,7 @@ public class Restaurant implements Serializable {
     }
 
     public Restaurant(RestaurantDTO dto) {
-        this.id = dto.getId();
+        this.id = Integer.parseInt(dto.getId());
         this.name = dto.getName();
     }
     
