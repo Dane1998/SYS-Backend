@@ -6,6 +6,8 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,16 +29,13 @@ public class Trip implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToMany(mappedBy = "trip")
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.PERSIST)
     private List<Flight> flights = new ArrayList();
 
+    @Column (name="user_name")
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "trip_restauran",
-            joinColumns = @JoinColumn(name = "tripID"),
-            inverseJoinColumns = @JoinColumn(name = "restaurantID"))
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Restaurant> restaurants = new ArrayList();
 
     public Trip() {
@@ -76,6 +75,7 @@ public class Trip implements Serializable {
     public void setRestaurants(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
+
     public void addRestaurant(Restaurant restaurant) {
         restaurants.add(restaurant);
     }

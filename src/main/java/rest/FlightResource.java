@@ -5,17 +5,23 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dto.FlightDTO;
 import dto.FrontAirportDTO;
+import dto.RestaurantDTO;
+import dto.TripDTO;
 import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import facades.FlightFacade;
 import fetch.FlightFetcher;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.json.Json;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
@@ -40,7 +46,7 @@ public class FlightResource {
 
     // private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static ExecutorService threadPool = Executors.newCachedThreadPool();
-    private static FlightFetcher fetcher = new FlightFetcher();
+    private static FlightFetcher FETCHER = new FlightFetcher();
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final FlightFacade FACADE = FlightFacade.getFlightFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -69,12 +75,12 @@ public class FlightResource {
         System.out.println("In allAirports point");
         ArrayList<FrontAirportDTO> list = FACADE.allAirports();
         return GSON.toJson(list);
-        // return gson.toJson( fetcher.allAirports());
+        // return gson.toJson( FETCHER.allAirports());
 
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON) 
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
 
     @Path("findflights")
@@ -91,21 +97,27 @@ public class FlightResource {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        System.out.println("1: dep: "+depCode+", arr: "+arrCode+" date: "+date);
-        return GSON.toJson(fetcher.findFlights(GSON, threadPool, depCode, arrCode, date));
+        System.out.println("1: dep: " + depCode + ", arr: " + arrCode + " date: " + date);
+        return GSON.toJson(FETCHER.findFlights(GSON, threadPool, depCode, arrCode, date));
     }
-    
-    
+
     @POST
-    @Produces(MediaType.APPLICATION_JSON) 
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("savetrip")
-    public String saveTrip(String jsonString) {
-        
+    public String saveTrip(String jsonString) throws API_Exception, NotFoundException {
+        System.out.println("In endpoint save trip");
         JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+        TripDTO trip;
 
-        
-        return "";
+        try {
+            trip = GSON.fromJson(json, TripDTO.class);
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+        String msg = FACADE.saveTrip(trip);
+
+        return "{\"msg\":\""+msg+"\"}";
     }
 
 }

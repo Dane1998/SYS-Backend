@@ -3,9 +3,11 @@
  */
 package entities;
 
+import dto.RestaurantDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,11 +25,11 @@ public class Restaurant implements Serializable {
 
     @Id
     @NotNull
-    @Column(name = "restaurantID")
+    
     private int id;
     private String name;
 
-    @ManyToMany(mappedBy = "restaurants")
+    @ManyToMany(mappedBy = "restaurants"  , cascade = CascadeType.PERSIST)
     private List<Trip> trips = new ArrayList();
 
     public Restaurant() {
@@ -60,6 +62,12 @@ public class Restaurant implements Serializable {
     public void setID(int id) {
         this.id=id;
     }
+
+    public Restaurant(RestaurantDTO dto) {
+        this.id = dto.getId();
+        this.name = dto.getName();
+    }
+    
     
     
 }
