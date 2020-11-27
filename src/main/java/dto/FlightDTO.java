@@ -60,6 +60,11 @@ public class FlightDTO {
     public void setFlight_date(String flight_date) {
         this.flight_date = flight_date;
     }
+
+    @Override
+    public String toString() {
+        return "FlightDTO{" + "flight_date=" + flight_date + ", flight_status=" + flight_status + ", departure=" + departure.getAqirport()+ ", arrival=" + arrival.getAirport()+ ", airline=" + airline.getName() + ", live=" + live.getUpdated() + '}';
+    }
     
     
     

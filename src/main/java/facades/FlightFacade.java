@@ -2,10 +2,13 @@ package facades;
 
 import dto.FlightDTO;
 import dto.FrontAirportDTO;
+import dto.RestaurantDTO;
+import dto.TripDTO;
 import entities.Flight;
 import entities.Restaurant;
 import entities.Trip;
 import entities.User;
+import errorhandling.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -64,27 +67,32 @@ public class FlightFacade {
         return all;
     }
 
-    public void saveTrip(List<FlightDTO> flights, List<Integer> restaurants, String userName) {
+    public String saveTrip(TripDTO dto) throws NotFoundException {
         Trip trip = new Trip();
-        for (Integer restaurant : restaurants) {
-            Restaurant mr = new Restaurant();
-            mr.setName("default");
-            mr.setID(restaurant);
-            trip.addRestaurant(mr);
+        
+        for (RestaurantDTO rDTO : dto.getRestaurants()) {
+            Restaurant restaurant = new Restaurant(rDTO);
+
+            trip.addRestaurant(restaurant);
         }
-        for (FlightDTO dto : flights) {
-            trip.addFlight(new Flight(dto));
+        for (FlightDTO fDTO : dto.getFlights()) {
+            trip.addFlight(new Flight(fDTO));
 
         }
 
         EntityManager em = emf.createEntityManager();
         try {
-            em.getTransaction().begin();
-            User user = em.find(User.class, userName);
-            trip.setUser(user);
-            em.persist(trip);
-            em.getTransaction().commit();
+            User user = em.find(User.class, dto.getUsername());
+            if (user == null) {
+                throw new NotFoundException("User does not exist in the system0");
+            } else {
 
+                em.getTransaction().begin();
+                trip.setUser(user);
+                em.persist(trip);
+                em.getTransaction().commit();
+                return "The trip is saved on the trip list";
+            }
         } finally {
             em.close();
         }

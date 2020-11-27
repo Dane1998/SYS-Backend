@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
  * @author magda
  */
 public class DepartureDTO{
-    private String aqirport;
+    private String airport;
     private String terminal;
     private String gate;
     private String iata;
@@ -23,7 +23,7 @@ public class DepartureDTO{
   
 
     public String getAqirport() {
-        return aqirport;
+        return airport;
     }
 
     public String getTerminal() {
