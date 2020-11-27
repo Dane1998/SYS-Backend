@@ -6,19 +6,19 @@ package dto;
  * @author Dane
  */
 public class RestaurantDTO {
-    private int id;
+    private String id;
     private String name;
     private RestaurantLocationDTO location;
     
 
-    public RestaurantDTO(int id, String name, RestaurantLocationDTO location) {
+    public RestaurantDTO(String id, String name, RestaurantLocationDTO location) {
         this.id = id;
         this.name = name;
         this.location = location;
  
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
     

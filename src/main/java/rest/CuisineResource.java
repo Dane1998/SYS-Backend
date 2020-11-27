@@ -36,25 +36,35 @@ import sun.nio.ch.ThreadPool;
  *
  * @author Bruger
  */
-    @Path("cuisine")
+@Path("cuisine")
 public class CuisineResource {
 
-
-    
     @Context
     private UriInfo context;
     private static final ExecutorService es = Executors.newCachedThreadPool();
     private static CuisineFetcher fetcher = new CuisineFetcher();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-     
-   
-   @Path("cuisine{city_id}")
-   @GET
-   @Produces(MediaType.APPLICATION_JSON)
-   public String getCuisines(@PathParam("city_id") String city_id) throws IOException, MalformedURLException, NotFoundException {
-       return GSON.toJson(fetcher.getCuisines(GSON, es, city_id));
-   }
 
-            
+    @Path("cuisine{city_id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getCuisines(@PathParam("city_id") String city_id) throws IOException, MalformedURLException, NotFoundException {
+        return GSON.toJson(fetcher.getCuisines(GSON, es, city_id));
+    }
+
+    @Path("test")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String findCuisines(String jsonString) throws NotFoundException, API_Exception, IOException {
+        String city_id;
+       try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            city_id = json.get("city_id").getAsString();
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+        return GSON.toJson(fetcher.getCuisines(GSON, es, city_id));
+    }
+
 }
-

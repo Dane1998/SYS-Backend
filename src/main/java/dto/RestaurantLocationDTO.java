@@ -8,11 +8,11 @@ package dto;
 public class RestaurantLocationDTO {
     private String address;
     private String city;
-    private double latitude;
-    private double longitude;
-    private int zipcode;
+    private String latitude;
+    private String longitude;
+    private String zipcode;
 
-    public RestaurantLocationDTO(String address, String city, double latitude, double longitude, int zipcode) {
+    public RestaurantLocationDTO(String address, String city, String latitude, String longitude, String zipcode) {
         this.address = address;
         this.city = city;
         this.latitude = latitude;
@@ -28,15 +28,15 @@ public class RestaurantLocationDTO {
         return city;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public int getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
     

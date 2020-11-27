@@ -34,7 +34,7 @@ import utils.HttpUtils;
  */
 public class CuisineFetcher {
 
-    private static final String URL = "https://developers.zomato.com/api/v2.1/cuisines?city_id=";
+    private static final String URL = "https://developers.zomato.com/api/v2.1/cuisines";
     private static Gson GSON = new GsonBuilder().create();
 
     public ArrayList<CuisineDTO> getCuisines(Gson gson, ExecutorService threadPool, String city_id) throws MalformedURLException, IOException, NotFoundException {
@@ -67,7 +67,7 @@ public class CuisineFetcher {
     }
 
     public static String callForFetch(String city_id) throws IOException {
-        String cityidString = city_id;
+        String cityidString = "?city_id=" + city_id;
         URL url = new URL(URL + cityidString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
