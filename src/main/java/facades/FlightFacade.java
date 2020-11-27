@@ -3,7 +3,7 @@ package facades;
 import dto.FlightDTO;
 import dto.FrontAirportDTO;
 import entities.Flight;
-import entities.MiniRestaurant;
+import entities.Restaurant;
 import entities.Trip;
 import entities.User;
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class FlightFacade {
     public void saveTrip(List<FlightDTO> flights, List<Integer> restaurants, String userName) {
         Trip trip = new Trip();
         for (Integer restaurant : restaurants) {
-            MiniRestaurant mr = new MiniRestaurant();
+            Restaurant mr = new Restaurant();
             mr.setName("default");
             mr.setID(restaurant);
             trip.addRestaurant(mr);

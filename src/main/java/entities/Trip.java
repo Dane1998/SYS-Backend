@@ -37,7 +37,7 @@ public class Trip implements Serializable {
             name = "trip_restauran",
             joinColumns = @JoinColumn(name = "tripID"),
             inverseJoinColumns = @JoinColumn(name = "restaurantID"))
-    private List<MiniRestaurant> restaurants = new ArrayList();
+    private List<Restaurant> restaurants = new ArrayList();
 
     public Trip() {
     }
@@ -69,14 +69,14 @@ public class Trip implements Serializable {
         }
     }
 
-    public List<MiniRestaurant> getRestaurants() {
+    public List<Restaurant> getRestaurants() {
         return restaurants;
     }
 
-    public void setRestaurants(List<MiniRestaurant> restaurants) {
+    public void setRestaurants(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
-    public void addRestaurant(MiniRestaurant restaurant) {
+    public void addRestaurant(Restaurant restaurant) {
         restaurants.add(restaurant);
     }
 

@@ -9,6 +9,7 @@ public class RestaurantDTO {
     private int id;
     private String name;
     private RestaurantLocationDTO location;
+    
 
     public RestaurantDTO(int id, String name, RestaurantLocationDTO location) {
         this.id = id;

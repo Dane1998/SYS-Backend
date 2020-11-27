@@ -1,86 +1,65 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Gruppe 3 SYS
  */
 package entities;
 
-import dto.RestaurantDTO;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Dane
+ * @author magda
  */
 @Entity
 public class Restaurant implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @NotNull
+    @Column(name = "restaurantID")
+    private int id;
     private String name;
-    private String address;
-    private String city;
-    private double latitude;
-    private double longitude;
-    private int zipcode;
+
+    @ManyToMany(mappedBy = "restaurants")
+    private List<Trip> trips = new ArrayList();
 
     public Restaurant() {
     }
 
-    public Restaurant(RestaurantDTO restaurantDTO) {
-        this.name = restaurantDTO.getName();
-        this.address = restaurantDTO.getLocation().getAddress();
-        this.city = restaurantDTO.getLocation().getCity();
-        this.latitude = restaurantDTO.getLocation().getLatitude();
-        this.longitude = restaurantDTO.getLocation().getLongitude();
-        this.zipcode = restaurantDTO.getLocation().getZipcode();
-   
-    }
-    
-    public Long getId() {
+    public int getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getAddress() {
-        return address;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public List<Trip> getTrips() {
+        return trips;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public void setTrips(List<Trip> trips) {
+        this.trips = trips;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public void addTrip(Trip trip) {
+        trips.add(trip);
     }
 
-    public int getZipcode() {
-        return zipcode;
+    public void setID(int id) {
+        this.id=id;
     }
-    
-    
-
     
     
 }
