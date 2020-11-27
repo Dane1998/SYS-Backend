@@ -72,16 +72,23 @@ public class RestaurantResource {
         String count;
         String cuisines;
         String category;
+        String latitude;
+        String longitude;
+        String radius;
 
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
             count = json.get("count").getAsString();
             cuisines = json.get("cuisines").getAsString();
             category = json.get("category").getAsString();
+            latitude = json.get("lat").getAsString();
+            longitude = json.get("lon").getAsString();
+            radius = json.get("radius").getAsString();
+            
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        return GSON.toJson(fetcher.getRestaurant(GSON, threadPool, count, cuisines, category));
+        return GSON.toJson(fetcher.getRestaurant(GSON, threadPool, count, cuisines, category, latitude, longitude, radius));
     }
 
 }

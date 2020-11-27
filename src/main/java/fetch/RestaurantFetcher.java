@@ -28,14 +28,14 @@ public class RestaurantFetcher {
     private static final String URL = "https://developers.zomato.com/api/v2.1/search";
     private static Gson GSON = new GsonBuilder().create();
 
-    public ArrayList<RestaurantDTO> getRestaurant(Gson gson, ExecutorService threadPool, String count, String cuisines, String category) throws NotFoundException {
+    public ArrayList<RestaurantDTO> getRestaurant(Gson gson, ExecutorService threadPool, String count, String cuisines, String category, String latitude, String longitude, String radius) throws NotFoundException {
         Callable<ArrayList<RestaurantDTO>> restaurantTask = new Callable<ArrayList<RestaurantDTO>>() {
             @Override
             public ArrayList<RestaurantDTO> call() throws IOException {
                 String result;
                 RestaurantListDTO rl;
                 ArrayList<RestaurantDTO> all = new ArrayList();
-                result = callForFetch(count, cuisines, category);
+                result = callForFetch(count, cuisines, category, latitude, longitude, radius);
                 rl = GSON.fromJson(result, RestaurantListDTO.class);
                 for (RestaurantKeeperDTO keeper : rl.getRestaurants()) {
                     all.add(keeper.getRestaurant());
@@ -56,11 +56,14 @@ public class RestaurantFetcher {
         return result;
     }
 
-    public static String callForFetch(String count, String cuisine, String category) throws IOException {
+    public static String callForFetch(String count, String cuisine, String category, String latitude, String longitude, String radius) throws IOException {
         String countString = "?count=" + count;
         String cuisinesString = "&cuisines=" + cuisine;
         String categoryString = "&category=" + category;
-        URL url = new URL(URL + countString + cuisinesString + categoryString);
+        String latitudeString = "&lat=" + latitude;
+        String longitudeString = "&lon=" + longitude;
+        String radiusString = "&radius=" + radius; 
+        URL url = new URL(URL + countString + latitudeString + longitudeString+ radiusString+ cuisinesString + categoryString );
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
