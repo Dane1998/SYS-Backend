@@ -33,7 +33,7 @@ import utils.HttpUtils;
  */
 public class CuisineFetcher {
 
-    private static final String URL = "https://developers.zomato.com/api/v2.1/cuisines";
+    private static final String URL = "https://developers.zomato.com/api/v2.1/cuisines?city_id=";
     private static Gson GSON = new GsonBuilder().create();
 
     public ArrayList<CuisineDTO> getCuisines(Gson gson, ExecutorService threadPool, String city_id) throws MalformedURLException, IOException, NotFoundException {
@@ -47,14 +47,11 @@ public class CuisineFetcher {
                 results = callForFetch(city_id);
                 cl = GSON.fromJson(results, CuisineListDTO.class);
                 all.addAll(cl.getCuisines());
-                return all ; 
+                return all;
             }
-         
-        
-                
-    };
+        };
         Future<ArrayList<CuisineDTO>> futureCuisines = threadPool.submit(cuisineTask);
-        
+
         ArrayList<CuisineDTO> result;
         try {
             result = futureCuisines.get(20, TimeUnit.SECONDS);
@@ -66,16 +63,23 @@ public class CuisineFetcher {
         return result;
     }
 
-        
-
     public static String callForFetch(String city_id) throws IOException {
-       // String key = "54348244fce52e40658f0500d58769b0";
-       // String keyString = "?user-key=" + key;
-        String city_idString = city_id;
-        String _url = URL + city_idString;
-
-        return HttpUtils.fetchData(_url);
+        String cityidString = city_id;
+        URL url = new URL(URL + cityidString);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("User-Agent", "server");
+        con.setRequestProperty("user-key", "864497503a23e7b6ba474e5159324cc9");
+        Scanner scan = new Scanner(con.getInputStream());
+        String jsonStr = null;
+        if (scan.hasNext()) {
+            jsonStr = scan.nextLine();
+        }
+        scan.close();
+        System.out.println(jsonStr);
+        return jsonStr;
+             
     }
 
-  
 }
