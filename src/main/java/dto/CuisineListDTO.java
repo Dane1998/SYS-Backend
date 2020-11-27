@@ -5,6 +5,7 @@
  */
 package dto;
 
+import dto.cuisineFetchResult.CuisineKeeperDTO;
 import java.util.ArrayList;
 
 /**
@@ -13,13 +14,13 @@ import java.util.ArrayList;
  */
 public class CuisineListDTO {
     
-    ArrayList<CuisineDTO> cuisines;
+    ArrayList<CuisineKeeperDTO> cuisines;
 
-    public CuisineListDTO(ArrayList<CuisineDTO> cuisines) {
+    public CuisineListDTO(ArrayList<CuisineKeeperDTO> cuisines) {
         this.cuisines = cuisines;
     }
 
-    public ArrayList<CuisineDTO> getCuisines() {
+    public ArrayList<CuisineKeeperDTO> getCuisines() {
         return cuisines;
     }
     

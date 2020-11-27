@@ -11,6 +11,7 @@ import dto.CuisineDTO;
 import dto.CuisineListDTO;
 import dto.FlightDTO;
 import dto.cities.LocationSugDTO;
+import dto.cuisineFetchResult.CuisineKeeperDTO;
 import errorhandling.NotFoundException;
 import static fetch.zCityFetcher.getCities;
 import java.io.IOException;
@@ -46,12 +47,14 @@ public class CuisineFetcher {
                 ArrayList<CuisineDTO> all = new ArrayList();
                 results = callForFetch(city_id);
                 cl = GSON.fromJson(results, CuisineListDTO.class);
-                all.addAll(cl.getCuisines());
+                for (CuisineKeeperDTO keeper : cl.getCuisines()) {
+                    all.add(keeper.getCuisine());
+                }
                 return all;
             }
         };
         Future<ArrayList<CuisineDTO>> futureCuisines = threadPool.submit(cuisineTask);
-
+        
         ArrayList<CuisineDTO> result;
         try {
             result = futureCuisines.get(20, TimeUnit.SECONDS);

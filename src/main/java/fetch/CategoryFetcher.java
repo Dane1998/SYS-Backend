@@ -49,26 +49,7 @@ public class CategoryFetcher {
         return jsonStr;
     }
     
-//    public List<CategoriesListDTO> getList() throws IOException{
-//        CategoryFetcher cf = new CategoryFetcher();
-//        
-//        
-//        String categoryString = cf.getCategoriess();
-//        System.out.println("hallo "+categoryString);
-//        
-//        CategoriesListDTO categories = GSON.fromJson(categoryString,CategoriesListDTO.class);
-//        
-//        ArrayList<CategoriesListDTO> a = new ArrayList();
-//        
-//        a.add(categories);
-//        
-//        AllCategoriesListDTO allCategories = new AllCategoriesListDTO(a);
-//        
-//        
-//        
-//        System.out.println("categories " + categories);
-//        return allCategories.getAllCategories();
-//    }
+
     
     public static ArrayList<CategoryDTO> getAllCategories () throws IOException{
         String categoriesString = getCategoriess();
