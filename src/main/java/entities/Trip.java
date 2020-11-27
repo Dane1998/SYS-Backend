@@ -10,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
@@ -28,13 +31,17 @@ public class Trip implements Serializable {
     private List<Flight> flights = new ArrayList();
 
     private User user;
-    private List<Integer> restaurantID = new ArrayList();
+
+    @ManyToMany
+    @JoinTable(
+            name = "trip_restauran",
+            joinColumns = @JoinColumn(name = "tripID"),
+            inverseJoinColumns = @JoinColumn(name = "restaurantID"))
+    private List<MiniRestaurant> restaurants = new ArrayList();
 
     public Trip() {
     }
 
-    
-    
     public int getId() {
         return id;
     }
@@ -54,16 +61,23 @@ public class Trip implements Serializable {
         this.user = user;
     }
 
-    public List<Integer> getRestaurantID() {
-        return restaurantID;
-    }
-
     public void addFlight(Flight flight) {
         this.flights.add(flight);
 
         if (flight.getTrip() == null) {
             flight.setTrip(this);
         }
+    }
+
+    public List<MiniRestaurant> getRestaurants() {
+        return restaurants;
+    }
+
+    public void setRestaurants(List<MiniRestaurant> restaurants) {
+        this.restaurants = restaurants;
+    }
+    public void addRestaurant(MiniRestaurant restaurant) {
+        restaurants.add(restaurant);
     }
 
 }

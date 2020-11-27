@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dto.AirportDTO;
 import dto.FrontAirportDTO;
 import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
@@ -94,6 +93,19 @@ public class FlightResource {
         }
         System.out.println("1: dep: "+depCode+", arr: "+arrCode+" date: "+date);
         return GSON.toJson(fetcher.findFlights(GSON, threadPool, depCode, arrCode, date));
+    }
+    
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON) 
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("savetrip")
+    public String saveTrip(String jsonString) {
+        
+        JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+
+        
+        return "";
     }
 
 }

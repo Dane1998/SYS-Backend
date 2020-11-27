@@ -1,12 +1,11 @@
 package facades;
 
-import dto.AirportDTO;
-import dto.CityDTO;
+import dto.FlightDTO;
 import dto.FrontAirportDTO;
-import entities.Airport;
-import entities.City;
-import fetch.FlightFetcher;
-import java.io.IOException;
+import entities.Flight;
+import entities.MiniRestaurant;
+import entities.Trip;
+import entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -39,13 +38,12 @@ public class FlightFacade {
      */
     public ArrayList<FrontAirportDTO> allAirports() {
         ArrayList<FrontAirportDTO> all = new ArrayList();
-        emf = EMF_Creator.createEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             List<Object[]> results = em.createQuery("SELECT a.id, a.name, a.iata_code, a.country_name, c.city_name, a.latitude, a.longitude   from Airport a JOIN City c ON a.city_iata_code = c.iata_code").getResultList();
-            int count=0;
-           
+            int count = 0;
+
             for (Object[] result : results) {
                 count++;
                 int id = (int) result[0];
@@ -66,6 +64,31 @@ public class FlightFacade {
         return all;
     }
 
-    
+    public void saveTrip(List<FlightDTO> flights, List<Integer> restaurants, String userName) {
+        Trip trip = new Trip();
+        for (Integer restaurant : restaurants) {
+            MiniRestaurant mr = new MiniRestaurant();
+            mr.setName("default");
+            mr.setID(restaurant);
+            trip.addRestaurant(mr);
+        }
+        for (FlightDTO dto : flights) {
+            trip.addFlight(new Flight(dto));
+
+        }
+
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, userName);
+            trip.setUser(user);
+            em.persist(trip);
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+
+    }
 
 }
