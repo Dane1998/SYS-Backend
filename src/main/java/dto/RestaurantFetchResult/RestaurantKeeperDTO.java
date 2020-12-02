@@ -1,5 +1,5 @@
 
-package dto.dto.RestaurantFetchResult;
+package dto.RestaurantFetchResult;
 
 import dto.RestaurantDTO;
 

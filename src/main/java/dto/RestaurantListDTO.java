@@ -1,7 +1,7 @@
 
 package dto;
 
-import dto.dto.RestaurantFetchResult.RestaurantKeeperDTO;
+import dto.RestaurantFetchResult.RestaurantKeeperDTO;
 import java.util.ArrayList;
 
 /**

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.RestaurantDTO;
 import dto.RestaurantListDTO;
-import dto.dto.RestaurantFetchResult.RestaurantKeeperDTO;
+import dto.RestaurantFetchResult.RestaurantKeeperDTO;
 import errorhandling.NotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
