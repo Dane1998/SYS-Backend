@@ -7,8 +7,10 @@ import dto.FrontAirportDTO;
 import dto.RestaurantDTO;
 import dto.RestaurantLocationDTO;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -77,5 +79,19 @@ public class FlightFacadeTest {
         
         System.out.println("Radiusin km: "+r);
         assertEquals(r, 11.78,1.5);
+    }
+    
+    @Test
+    void getNearestAirortsTest(){
+        RestaurantDTO restaurant= new RestaurantDTO("", "", new RestaurantLocationDTO("","","50.83629", "16.30990",""));
+         Map<FrontAirportDTO, Double> nearest= new LinkedHashMap();
+      /*  Map<FrontAirportDTO, Double> sorted=facade.getNearestAirorts(restaurant, 0);
+       for (int i = 0; i < 10; i++) {
+            FrontAirportDTO radius = (FrontAirportDTO) sorted.keySet().toArray()[i];
+            Double valuse =sorted.get(radius);
+            nearest.put(radius, valuse);
+            System.out.println(nearest.get(radius));
+        }*/
+        System.out.println(facade.getNearestAirorts(restaurant, 22));
     }
 }
