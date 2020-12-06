@@ -32,6 +32,19 @@ public class FrontAirportDTO {
         return "FrontAirportDTO{" + "id=" + id + ", name=" + name + ", code=" + code + ", country=" + country + ", city=" + city + ", latitude=" + latitude + ", longitude=" + longitude + '}';
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getCity() {
+        return city;
+    }
+    
+
     
     
 }
