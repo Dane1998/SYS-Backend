@@ -34,7 +34,7 @@ public class FlightFacadeTest {
        emf = EMF_Creator.createEntityManagerFactory();
        facade = FlightFacade.getFlightFacade(emf);
     }
-    @Disabled
+   // @Disabled
     @Test
     public void testSomeMethod(){
         ArrayList<FrontAirportDTO> list = facade.allAirports();
