@@ -37,7 +37,7 @@ public class CuisineFetcher {
     private static final String URL = "https://developers.zomato.com/api/v2.1/cuisines";
     private static Gson GSON = new GsonBuilder().create();
 
-    public ArrayList<CuisineDTO> getCuisines(Gson gson, ExecutorService threadPool, String city_id) throws MalformedURLException, IOException, NotFoundException {
+    public static ArrayList<CuisineDTO> getCuisines(Gson gson, ExecutorService threadPool, String city_id) throws MalformedURLException, IOException, NotFoundException {
         Callable<ArrayList<CuisineDTO>> cuisineTask = new Callable<ArrayList<CuisineDTO>>() {
             @Override
             public ArrayList<CuisineDTO> call() throws IOException {
