@@ -27,6 +27,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import utils.EMF_Creator;
+import utils.HttpUtils;
 
 /**
  * REST Web Service
@@ -40,11 +41,11 @@ public class FlightResource {
     private UriInfo context;
 
     // private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
-    private static ExecutorService threadPool = Executors.newCachedThreadPool();
-    private static FlightFetcher FETCHER = new FlightFetcher();
+    private static final ExecutorService threadPool = HttpUtils.getThreadPool();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static FlightFetcher FETCHER = FlightFetcher.getFlightFetcher(GSON, threadPool);
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final FlightFacade FACADE = FlightFacade.getFlightFacade(EMF);
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     /**
      * Creates a new instance of FlightResource
@@ -93,7 +94,7 @@ public class FlightResource {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
         System.out.println("1: dep: " + depCode + ", arr: " + arrCode + " date: " + date);
-        return GSON.toJson(FETCHER.findFlights(GSON, threadPool, depCode, arrCode, date));
+        return GSON.toJson(FETCHER.findFlights(depCode, arrCode, date));
     }
 
     @POST
@@ -112,7 +113,7 @@ public class FlightResource {
         }
         String msg = FACADE.saveTrip(trip);
 
-        return "{\"msg\":\""+msg+"\"}";
+        return "{\"msg\":\"" + msg + "\"}";
     }
 
 }

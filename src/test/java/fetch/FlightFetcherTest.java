@@ -1,15 +1,9 @@
 package fetch;
 
-import dto.FlightDTO;
-import dto.flightFetchResult.AirlineDTO;
-import dto.flightFetchResult.ArrivalDTO;
-import dto.flightFetchResult.DepartureDTO;
-import dto.flightFetchResult.LiveDTO;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import org.junit.jupiter.api.Test;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.concurrent.ExecutorService;
+import utils.HttpUtils;
 
 /**
  *
@@ -17,8 +11,9 @@ import org.junit.jupiter.api.Test;
  */
 public class FlightFetcherTest {
 
-    private static FlightFetcher ff = new FlightFetcher();
-
+    private static final ExecutorService threadPool = HttpUtils.getThreadPool();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static FlightFetcher fetcher = FlightFetcher.getFlightFetcher(GSON, threadPool);
    
 
 }

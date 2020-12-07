@@ -30,11 +30,24 @@ import utils.HttpUtils;
 public class FlightFetcher {
 
     private static final String URL = "http://api.aviationstack.com/v1";
-    private static Gson GSON = new GsonBuilder().create();
+    private static Gson GSON;// = new GsonBuilder().create();
+    private static FlightFetcher instance;
+    private static ExecutorService threadPool;
 
-    private static FlightFetcher ff = new FlightFetcher();
+    private FlightFetcher() {
+    }
 
-    public ArrayList<FlightDTO> findFlights(Gson gson, ExecutorService threadPool, String dep_iata, String arr_iata, String date) throws NotFoundException {
+    public static FlightFetcher getFlightFetcher(Gson _gson, ExecutorService _threadPool) {
+        if (instance == null) {
+            GSON = _gson;
+            threadPool = _threadPool;
+            instance = new FlightFetcher();
+
+        }
+        return instance;
+    }
+
+    public ArrayList<FlightDTO> findFlights( String dep_iata, String arr_iata, String date) throws NotFoundException {
 
         Callable<ArrayList<FlightDTO>> flightsTask = new Callable<ArrayList<FlightDTO>>() {
             @Override
@@ -48,7 +61,7 @@ public class FlightFetcher {
                     System.out.println("2:   date: " + date);
                     results = callForFetch(offset, dep_iata, arr_iata, date);
                     list = GSON.fromJson(results, FlightsListDTO.class);
-                    Set<FlightDTO> set= new LinkedHashSet<>(list.getData());
+                    Set<FlightDTO> set = new LinkedHashSet<>(list.getData());
                     all.addAll(set);
                     total = list.getPagination().getTotal();
                     offset += 100;
@@ -74,24 +87,6 @@ public class FlightFetcher {
             throw new NotFoundException(ex.getMessage());
         }
         return result;
-    }
-
-    public ArrayList<FlightDTO> checkDoublets(ArrayList<FlightDTO> result) {
-        ArrayList<FlightDTO> sorted = new ArrayList();
-
-        for (FlightDTO flight : result) {
-            if (flight != null) {
-                FlightDTO single = flight; //I  instantiate a new flight dtoto keep data abaout the checked flight
-                flight = null; //And I set the flight as null, so I know that it has been chacked
-                for (FlightDTO checked : result) { //I check all th elements if they equal to the value of the checked flight object 
-                    if (checked != null && checked.equals(single)) { //if each of element is not null and it equals to thw one we are checking , it's sat as null
-                        checked = null;
-                    }
-                }
-            }
-        }
-
-        return sorted;
     }
 
     public static String callForFetch(int offset, String dep_iata, String arr_iata, String date) throws IOException, NotFoundException {

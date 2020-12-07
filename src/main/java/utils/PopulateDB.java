@@ -19,6 +19,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -27,11 +28,13 @@ import javax.persistence.EntityManagerFactory;
  * @author magda
  */
 public class PopulateDB {
-     private static final String URL = "http://api.aviationstack.com/v1";
-    private static Gson GSON = new GsonBuilder().create();
-    private static EntityManagerFactory emf;
 
-    private static FlightFetcher ff = new FlightFetcher();
+    private static final String URL = "http://api.aviationstack.com/v1";
+    // private static Gson GSON = new GsonBuilder().create();
+    private static EntityManagerFactory emf;
+    private static final ExecutorService threadPool = HttpUtils.getThreadPool();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static FlightFetcher ff = FlightFetcher.getFlightFetcher(GSON, threadPool);
 
     public static String getAirports(int offset) throws MalformedURLException, IOException {
 
@@ -52,7 +55,7 @@ public class PopulateDB {
             jsonStr = scan.nextLine();
         }
         scan.close();
-       
+
         return jsonStr;
     }
 
@@ -129,7 +132,7 @@ public class PopulateDB {
         }
         return all;
     }
-    
+
     public static String populateAirports() throws IOException {
         String msg = "Not persisted maaaaan";
         ArrayList<AirportDTO> allAirportsDTO = allAirports();
