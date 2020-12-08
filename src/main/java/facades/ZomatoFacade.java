@@ -74,7 +74,7 @@ public class ZomatoFacade {
         ArrayList<Integer> unusedID = new ArrayList();
         ArrayList<Integer> commonID = new ArrayList();
         int count = 0;
-        for (int i = 3600; i < 3800; i++) {
+        for (int i = 3784; i < 4000; i++) {
             count++;
             System.out.println("Counr: " + count);
             ArrayList<zCityDTO> singleResult;
@@ -151,7 +151,7 @@ public class ZomatoFacade {
     public static void main(String[] args) throws NotFoundException, IOException {
 
         System.out.println("----------------------------------------------------");
-    //    populateZomatoCities();
+        populateZomatoCities();
 
     }
 
