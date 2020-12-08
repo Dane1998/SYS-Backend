@@ -151,7 +151,7 @@ public class ZomatoFacade {
     public static void main(String[] args) throws NotFoundException, IOException {
 
         System.out.println("----------------------------------------------------");
-        populateZomatoCities();
+    //    populateZomatoCities();
 
     }
 
