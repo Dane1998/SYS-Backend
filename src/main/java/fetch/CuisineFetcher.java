@@ -80,7 +80,7 @@ public class CuisineFetcher {
             jsonStr = scan.nextLine();
         }
         scan.close();
-        System.out.println(jsonStr);
+       
         return jsonStr;
              
     }

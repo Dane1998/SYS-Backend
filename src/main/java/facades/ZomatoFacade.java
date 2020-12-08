@@ -60,11 +60,11 @@ public class ZomatoFacade {
 
     public ZomatoCityDTO getCityData(int cityID) throws IOException, MalformedURLException, NotFoundException {
 
-        //read citi Id from xityRequest json 
+        //read citi Id from cityRequest json 
         ArrayList<CuisineDTO> cuisines = CuisineFetcher.getCuisines(GSON, threadPool, Integer.toString(cityID) );
-        ArrayList<CollectionDTO> collections = new ArrayList();
+        //ArrayList<CollectionDTO> collections = new ArrayList();
+        ArrayList<CollectionDTO> collections =FETCHER.getCollections(cityID);
        ZomatoCityDTO zomatoCity = new ZomatoCityDTO(cityID,cuisines, collections );
-         // FETCHER.getListOfCollections(int cityID);
 
         return zomatoCity;
     }
@@ -74,7 +74,7 @@ public class ZomatoFacade {
         ArrayList<Integer> unusedID = new ArrayList();
         ArrayList<Integer> commonID = new ArrayList();
         int count = 0;
-        for (int i = 2690; i < 2700; i++) {
+        for (int i = 3600; i < 3800; i++) {
             count++;
             System.out.println("Counr: " + count);
             ArrayList<zCityDTO> singleResult;

@@ -9,8 +9,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.ZomatoCityDTO;
 import errorhandling.API_Exception;
+import errorhandling.NotFoundException;
 import facades.ZomatoFacade;
 import fetch.ZomatoFetcher;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.concurrent.ExecutorService;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
@@ -62,32 +65,21 @@ public class ZomatoResource {
      *
      * @param content representation for the resource
      */
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/citydata")
-    public String city(String cityRequest) {
-//        ZomatoCityDTO zomatoCity=new ZomatoCityDTO();
-//        zomatoCity=FACADE.getCityData(cityRequest);
-//        return GSON.toJson(zomatoCity);
-        return "{\"msg\":\"Not supportd yet\"}";
-    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/countries")
     public String countries() {
-        
+
         return GSON.toJson(FACADE.getAllCountries());
 
     }
-    
-    
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/citiylist")
     public String countries(String countryJson) throws API_Exception {
-       String country="";
-       try {
+        String country = "";
+        try {
             JsonObject json = JsonParser.parseString(countryJson).getAsJsonObject();
             country = json.get("country").getAsString();
         } catch (Exception e) {
@@ -96,15 +88,34 @@ public class ZomatoResource {
         return GSON.toJson(FACADE.getCitiesByCountry(country));
 
     }
-    
-     @GET
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/categories")
     public String catgories() {
-        
+
         return GSON.toJson(FACADE.getCategories());
 
     }
-    
-    
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/citydata")
+    public String city(String cityRequest) throws NotFoundException {
+        int cityID = 0;
+        String cityName = "given";
+        try {
+            JsonObject json = JsonParser.parseString(cityRequest).getAsJsonObject();
+            cityID = json.get("city_id").getAsInt();
+            cityName= json.get("city_name").getAsString();
+            ZomatoCityDTO zomatoCity = FACADE.getCityData(cityID);
+            return GSON.toJson(zomatoCity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new NotFoundException("We could not get data for " + cityName + " city");
+        }
+
+        //return "{\"msg\":\"Not supportd yet\"}";
+    }
+
 }
