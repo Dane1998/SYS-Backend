@@ -76,7 +76,7 @@ public class ZomatoResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/citiylist")
+    @Path("/citylist")
     public String countries(String countryJson) throws API_Exception {
         String country = "";
         try {
