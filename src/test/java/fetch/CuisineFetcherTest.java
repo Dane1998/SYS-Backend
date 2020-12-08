@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -29,7 +30,7 @@ public class CuisineFetcherTest {
     private static final ExecutorService es = Executors.newCachedThreadPool();
     private static CuisineFetcher fetcher = new CuisineFetcher();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    
+    @Disabled
     @Test
     public void getAllCuisinetest() throws IOException, MalformedURLException, MalformedURLException, NotFoundException{
        String city_id="280";
