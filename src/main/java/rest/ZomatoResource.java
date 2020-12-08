@@ -5,6 +5,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.ZomatoCityDTO;
@@ -106,7 +108,7 @@ public class ZomatoResource {
         try {
             JsonObject json = JsonParser.parseString(cityRequest).getAsJsonObject();
             cityID = json.get("city_id").getAsInt();
-           
+
             ZomatoCityDTO zomatoCity = FACADE.getCityData(cityID);
             return GSON.toJson(zomatoCity);
         } catch (Exception e) {
@@ -115,6 +117,91 @@ public class ZomatoResource {
         }
 
         //return "{\"msg\":\"Not supportd yet\"}";
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/search")
+    public String search(String request) throws NotFoundException, API_Exception {
+
+        int cityID;
+        Integer[] collections;
+        Integer[] cuisines;
+        Integer[] categories;
+        double latitude;
+        double longitude;
+        int radius;
+
+        JsonObject json = JsonParser.parseString(request).getAsJsonObject();
+
+        try {
+            cityID = json.get("city_id").getAsInt();
+        } catch (Exception e) {
+            throw new API_Exception("city_id required", 400, e);
+        }
+
+        try {
+            JsonArray collJson = json.getAsJsonArray("collections");
+            collections = new Integer[collJson.size()];
+            for (int i = 0; i < collJson.size(); i++) {
+                collections[i] = collJson.get(i).getAsInt();
+
+            }
+        } catch (Exception e) {
+            collections = new Integer[0];
+        }
+
+        try {
+            JsonArray cuisJson = json.getAsJsonArray("cuisines");
+            cuisines = new Integer[cuisJson.size()];
+            for (int i = 0; i < cuisJson.size(); i++) {
+                cuisines[i] = cuisJson.get(i).getAsInt();
+
+            }
+        } catch (Exception e) {
+            cuisines = new Integer[0];
+        }
+
+        try {
+            JsonArray catJson = json.getAsJsonArray("categories");
+            categories = new Integer[catJson.size()];
+            for (int i = 0; i < catJson.size(); i++) {
+                categories[i] = catJson.get(i).getAsInt();
+
+            }
+        } catch (Exception e) {
+            categories = new Integer[0];
+        }
+
+        try {
+            latitude = json.get("latitude").getAsDouble();
+
+        } catch (Exception e) {
+            latitude = 999999;
+
+        }
+
+        try {
+            longitude = json.get("longitude").getAsDouble();
+
+        } catch (Exception e) {
+            longitude = 999999;
+        }
+
+        try {
+            radius = json.get("radius").getAsInt();
+        } catch (Exception e) {
+            radius = -1;
+        }
+
+        try {
+            return GSON.toJson(FETCHER.getRestaurants(cityID, collections, cuisines, categories, latitude, longitude, radius));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new NotFoundException(e.getMessage());
+        }
+
+        // return "{\"msg\":\"Not supportd yet\"}";
     }
 
 }

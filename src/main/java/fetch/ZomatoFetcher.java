@@ -5,9 +5,13 @@ package fetch;
 
 import com.google.gson.Gson;
 import dto.CollectionDTO;
+import dto.RestaurantDTO;
+import dto.RestaurantFetchResult.RestaurantKeeperDTO;
+import dto.RestaurantListDTO;
 import dto.cities.LocationSugDTO;
 import dto.zCityDTO;
 import errorhandling.NotFoundException;
+import static fetch.RestaurantFetcher.callForFetch;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -27,7 +31,7 @@ import java.util.logging.Logger;
  */
 public class ZomatoFetcher {
 
-    private static final String URL = "https://developers.zomato.com/api/v2.1"; ///cities?city_ids=1
+    private static final String URL = "https://developers.zomato.com/api/v2.1";
     private static Gson GSON;
     private static ZomatoFetcher instance;
     private static ExecutorService threadPool;
@@ -47,7 +51,7 @@ public class ZomatoFetcher {
     }
 
     //based on Artem's methode
-    private static String fetchCity(int cityID) throws MalformedURLException {
+    private String fetchCity(int cityID) throws MalformedURLException {
         URL url = new URL(URL + "/cities?city_ids=" + cityID);
         String jsonStr = "";
         try {
@@ -56,7 +60,7 @@ public class ZomatoFetcher {
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("User-Agent", "server");
-            con.setRequestProperty("user-key", ZOMATO_KEY_3);
+            con.setRequestProperty("user-key", ZOMATO_KEY);
 
             Scanner scan;
 
@@ -121,7 +125,7 @@ public class ZomatoFetcher {
                     CollectionResult result = GSON.fromJson(fetchResult, CollectionResult.class);
                     for (CollectionKeeper col : result.getCollections()) {
                         list.add(col.getCollection());
-                        System.out.println("...................List size "+list.size());
+                        System.out.println("...................List size " + list.size());
                     }
                     return list;
                 }
@@ -142,17 +146,17 @@ public class ZomatoFetcher {
         return list;
     }
 
-    private  String fetchCollections(int cityID) {
+    private String fetchCollections(int cityID) {
         String jsonStr = "";
         try {
             URL url = new URL(URL + "/collections?city_id=" + cityID);
-           
+
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("User-Agent", "server");
-            con.setRequestProperty("user-key", ZOMATO_KEY_3);
+            con.setRequestProperty("user-key", ZOMATO_KEY);
 
             Scanner scan;
 
@@ -168,10 +172,108 @@ public class ZomatoFetcher {
             jsonStr = "";
             ex.printStackTrace();
         }
-       
+
         return jsonStr;
     }
-   
+
+    private String fetchRestaurans(int cityID, Integer[] collections, Integer[] cuisines, Integer[] categories, double latitude, double longitude, int radius) throws IOException {
+
+        String _url = "/search?";
+        String cityString = "entity_id=" + cityID + "&entity_type=city";
+
+        //&lat=15&lon=15
+        String locationString = "";
+        if (longitude != 999999 && longitude != 999999) {
+            locationString = "&lat=" + latitude + "&lon=" + longitude;
+        }
+
+        String cuisinesString = "";
+        if (cuisines.length > 0) {
+            for (int i = 0; i < cuisines.length; i++) {
+                if (i == 0) {
+                    cuisinesString += "&cuisines=" + cuisines[i];
+                } else {
+
+                    cuisinesString += "%2C" + cuisines[i];
+                }
+            }
+        }
+
+        String collectionString = "";
+        if (collections.length > 0) {
+
+            for (int i = 0; i < collections.length; i++) {
+                if (i == 0) {
+                    collectionString += "&collection_id=" + collections[i];
+                } else {
+                    collectionString += "%2C" + collections[i];
+                }
+            }
+        }
+
+        String categoryString = "";
+        if (categories.length > 0) {
+            for (int i = 0; i < categories.length; i++) {
+                if (i == 0) {
+                    categoryString += "&category=" + categories[i];
+                } else {
+                    categoryString += "%2C" + categories[i];
+                }
+            }
+        }
+
+        String radiusString = "";
+        if (radius >= 0) {
+            radiusString += "&radius=" + radius;
+        }
+        URL url = new URL(URL + _url + cityString + locationString + radiusString + cuisinesString + collectionString + categoryString);
+        System.out.println(url.toString());
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("User-Agent", "server");
+        con.setRequestProperty("user-key", ZOMATO_KEY);
+        Scanner scan = new Scanner(con.getInputStream());
+        String jsonStr = null;
+        if (scan.hasNext()) {
+            jsonStr = scan.nextLine();
+        }
+        scan.close();
+       
+        return jsonStr;
+
+    }
+
+    //Based on Daniel's method:
+    public ArrayList<RestaurantDTO> getRestaurants(int cityID, Integer[] collections, Integer[] cuisines, Integer[] categories, double latitude, double longitude, int radius) throws NotFoundException {
+        Callable<ArrayList<RestaurantDTO>> restaurantTask = new Callable<ArrayList<RestaurantDTO>>() {
+            @Override
+            public ArrayList<RestaurantDTO> call() throws IOException {
+                String result;
+                RestaurantListDTO rl;
+                ArrayList<RestaurantDTO> all = new ArrayList();
+                result = fetchRestaurans(cityID, collections, cuisines, categories, latitude, longitude, radius);
+                rl = GSON.fromJson(result, RestaurantListDTO.class);
+                for (RestaurantKeeperDTO keeper : rl.getRestaurants()) {
+                    all.add(keeper.getRestaurant());
+                }
+                return all;
+            }
+        };
+
+        Future<ArrayList<RestaurantDTO>> futureRestaurant = threadPool.submit(restaurantTask);
+        ArrayList<RestaurantDTO> result;
+        try {
+            result = futureRestaurant.get(5, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            Logger.getLogger(RestaurantFetcher.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            throw new NotFoundException(ex.getMessage());
+        }
+        return result;
+    }
+    
+
 }
 
 class CollectionKeeper {

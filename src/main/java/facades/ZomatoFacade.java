@@ -74,7 +74,7 @@ public class ZomatoFacade {
         ArrayList<Integer> unusedID = new ArrayList();
         ArrayList<Integer> commonID = new ArrayList();
         int count = 0;
-        for (int i = 3784; i < 4000; i++) {
+        for (int i = 4377; i < 5100; i++) {
             count++;
             System.out.println("Counr: " + count);
             ArrayList<zCityDTO> singleResult;
