@@ -103,16 +103,15 @@ public class ZomatoResource {
     @Path("/citydata")
     public String city(String cityRequest) throws NotFoundException {
         int cityID = 0;
-        String cityName = "given";
         try {
             JsonObject json = JsonParser.parseString(cityRequest).getAsJsonObject();
             cityID = json.get("city_id").getAsInt();
-            cityName= json.get("city_name").getAsString();
+           
             ZomatoCityDTO zomatoCity = FACADE.getCityData(cityID);
             return GSON.toJson(zomatoCity);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new NotFoundException("We could not get data for " + cityName + " city");
+            throw new NotFoundException("We could not get data for given city");
         }
 
         //return "{\"msg\":\"Not supportd yet\"}";
