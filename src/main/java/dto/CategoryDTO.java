@@ -3,6 +3,8 @@
  */
 package dto;
 
+import entities.Category;
+
 /**
  *
  * @author magda
@@ -11,9 +13,9 @@ public class CategoryDTO {
     private int id;
     private String name;
 
-    public CategoryDTO(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public CategoryDTO(Category entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
     }
 
     public int getId() {
@@ -23,6 +25,7 @@ public class CategoryDTO {
     public String getName() {
         return name;
     }
+    
     
     
     

@@ -5,13 +5,20 @@ package facades;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.CategoryDTO;
+import dto.CollectionDTO;
 import dto.CuisineDTO;
 import dto.ZomatoCityDTO;
 import dto.zCityDTO;
+import entities.Category;
 import entities.ZomatoCity;
 import errorhandling.NotFoundException;
+import fetch.CategoryFetcher;
+import fetch.CuisineFetcher;
 import fetch.ZomatoFetcher;
 import fetch.zCityFetcher;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
@@ -49,41 +56,37 @@ public class ZomatoFacade {
 
     }
 
-    public String saveZomatoCitiesinDB() {
-        String status = "Not saved";
+   
 
-        zCityFetcher fetcher = new zCityFetcher();
-        return status;
-
-    }
-
-    public ZomatoCityDTO getCityData(String cityRequest) {
+    public ZomatoCityDTO getCityData(int cityID) throws IOException, MalformedURLException, NotFoundException {
 
         //read citi Id from xityRequest json 
-        int cityID = 0;
-        ZomatoCityDTO zomatoCity = new ZomatoCityDTO();
-        //   ArrayList<CuisineDTO> cuisines = FETCHER.getListOfCuisines(cityID);
-        //  FETCHER.getListOfCollections(int cityID);
+        ArrayList<CuisineDTO> cuisines = CuisineFetcher.getCuisines(GSON, threadPool, Integer.toString(cityID) );
+        ArrayList<CollectionDTO> collections = new ArrayList();
+       ZomatoCityDTO zomatoCity = new ZomatoCityDTO(cityID,cuisines, collections );
+         // FETCHER.getListOfCollections(int cityID);
 
         return zomatoCity;
     }
 
-    public static ArrayList<zCityDTO> scrapCities() {
+    private static ArrayList<zCityDTO> scrapCities() {
         ArrayList<zCityDTO> cities = new ArrayList();
         ArrayList<Integer> unusedID = new ArrayList();
         ArrayList<Integer> commonID = new ArrayList();
-
-        for (int i = 1758; i < 2700; i++) {
-
+        int count = 0;
+        for (int i = 2690; i < 2700; i++) {
+            count++;
+            System.out.println("Counr: " + count);
             ArrayList<zCityDTO> singleResult;
             try {
                 singleResult = FETCHER.getCityfromZomato(i);
 
                 if (singleResult.size() < 1) {
+                    unusedID.add(i);
 
                 }
                 if (singleResult.size() > 1) {
-
+                    commonID.add(i);
                 }
                 System.out.println("CIty id: " + i);
                 if (singleResult.size() > 0) {
@@ -126,13 +129,30 @@ public class ZomatoFacade {
 
     }
 
-    public static void main(String[] args) throws NotFoundException {
+    private void populateCategories() throws IOException {
+
+        emf = EMF_Creator.createEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+        ArrayList<CategoryDTO> categories = CategoryFetcher.getAllCategories();
+        try {
+            em.getTransaction().begin();
+            for (CategoryDTO dto : categories) {
+                em.persist(new Category(dto));
+            }
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+
+        }
+
+    }
+
+    public static void main(String[] args) throws NotFoundException, IOException {
 
         System.out.println("----------------------------------------------------");
-        // populateZomatoCities();
-        // ArrayList<zCityDTO> list = getCitiesByCountry("Australia");
-        // System.out.println("list.size: " + list.size());
-        // getAllCountries();
+        populateZomatoCities();
+
     }
 
     public ArrayList<zCityDTO> getCitiesByCountry(String country) {
@@ -173,7 +193,24 @@ public class ZomatoFacade {
 
         return countries;
     }
-    
-    
 
+    public ArrayList<CategoryDTO> getCategories() {
+        EntityManager em = emf.createEntityManager();
+
+        ArrayList<CategoryDTO> list = new ArrayList();
+        try {
+            em.getTransaction().begin();
+            TypedQuery<Category> query = em.createQuery("SELECT c from Category c ", Category.class);
+
+            for (Category category : query.getResultList()) {
+                list.add(new CategoryDTO(category));
+            }
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+        return list;
+    }
+    
 }

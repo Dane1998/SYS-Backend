@@ -4,15 +4,12 @@
 package fetch;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import dto.cities.LocationSugDTO;
 import dto.zCityDTO;
 import errorhandling.NotFoundException;
-import static fetch.zCityFetcher.getCities;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -36,6 +33,7 @@ public class ZomatoFetcher {
     private static final String ZOMATO_KEY = "b56b72e22de9832e0798ab27cafe6a1a";
     private static final String ZOMATO_KEY_1 = "6f8518d08cbe8cf8158a2680714232b0";
     private static final String ZOMATO_KEY_2 = "54348244fce52e40658f0500d58769b0";
+    private static final String ZOMATO_KEY_3 = "864497503a23e7b6ba474e5159324cc9";
 
     public static ZomatoFetcher getZomatoFetcher(Gson _gson, ExecutorService _threadPool) {
         if (instance == null) {
@@ -48,7 +46,7 @@ public class ZomatoFetcher {
     }
 
     //based on Artem's methode
-    public static String fetchCity(int cityID) throws MalformedURLException {
+    private static String fetchCity(int cityID) throws MalformedURLException {
         URL url = new URL(URL + "/cities?city_ids=" + cityID);
         String jsonStr = "";
         try {
@@ -57,7 +55,7 @@ public class ZomatoFetcher {
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("User-Agent", "server");
-            con.setRequestProperty("user-key", "b56b72e22de9832e0798ab27cafe6a1a");
+            con.setRequestProperty("user-key", ZOMATO_KEY_1);
 
             Scanner scan;
 
@@ -77,6 +75,19 @@ public class ZomatoFetcher {
         return jsonStr;
     }
 
+    private String fetchCollections(int cityID) {
+        String jsonStr = "";
+
+        try {
+            URL url = new URL(URL + "collections?city_id=" + cityID);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ZomatoFetcher.class.getName()).log(Level.SEVERE, null, ex);
+            jsonStr = "{\"collections\":[]}";
+        }
+
+        return jsonStr;
+    }
+
     public ArrayList<zCityDTO> getCityfromZomato(int cityID) throws NotFoundException {
 
         Callable<ArrayList<zCityDTO>> getCities = new Callable<ArrayList<zCityDTO>>() {
@@ -93,14 +104,14 @@ public class ZomatoFetcher {
                 }
             }
         };
-        
+
         Future<ArrayList<zCityDTO>> futureCities = threadPool.submit(getCities);
 
         ArrayList<zCityDTO> cities;
 
         try {
             cities = futureCities.get(2, TimeUnit.SECONDS);
-            
+
         } catch (Exception ex) {
             Logger.getLogger(FlightFetcher.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -113,11 +124,6 @@ public class ZomatoFetcher {
     //        return cuisines;
     //    }
     //fetch collections and return list of them  
-
-    public ArrayList<Object> getListOfCollections(int cityID) {
-        ArrayList<Object> collections = new ArrayList();
-        return collections;
-    }
 
 }
 /*

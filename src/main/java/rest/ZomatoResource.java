@@ -97,7 +97,14 @@ public class ZomatoResource {
 
     }
     
-    
+     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/categories")
+    public String catgories() {
+        
+        return GSON.toJson(FACADE.getCategories());
+
+    }
     
     
 }
