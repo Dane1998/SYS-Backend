@@ -5,8 +5,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HttpUtils {
+    private static final ExecutorService threadPool = Executors.newCachedThreadPool();
+
 
     public static String fetchData(String _url) throws MalformedURLException, IOException {
        
@@ -25,7 +29,12 @@ public class HttpUtils {
         scan.close();
         return jsonStr;
     }
+    
+    public static ExecutorService getThreadPool(){
+        return threadPool;
+    }
 }
+
 
 /*
 URL:

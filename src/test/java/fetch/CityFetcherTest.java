@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * @author Bruger
  */
 public class CityFetcherTest {
-  //@Disabled
+  @Disabled
   @Test
    public void getAllCitiestest() throws IOException {
         ArrayList<zCityDTO>  list = zCityFetcher.getCityResult();

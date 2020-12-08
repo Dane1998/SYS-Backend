@@ -1,49 +1,39 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Gruppe 3 SYS
  */
-package dto;
+package entities;
 
-import entities.ZomatoCity;
+import dto.zCityDTO;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Bruger
+ * @author magda
  */
-public class zCityDTO {
+@Entity
+public class ZomatoCity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @NotNull
     private int id;
     private String name;
     private int country_id;
     private String country_name;
-    //private boolean is_state;
     private int state_id;
     private String state_name;
     private String state_code;
 
-    public zCityDTO(int id, String name, int country_id, String country_name, boolean is_state, int state_id, String state_name, String state_code) {
-        this.id = id;
-        this.name = name;
-        this.country_id = country_id;
-        this.country_name = country_name;
-       // this.is_state = is_state;
-        this.state_id = state_id;
-        this.state_name = state_name;
-        this.state_code = state_code;
+    public ZomatoCity() {
     }
-
-    public zCityDTO(ZomatoCity city) {
-        this.id = city.getId();
-        this.name = city.getName();
-        this.country_id = city.getCountry_id();
-        this.country_name = city.getCountry_name();
-        this.state_id = city.getState_id();
-        this.state_name = city.getState_name();
-        this.state_code = city.getState_code();
-    }
-
     
     
+
     public int getId() {
         return id;
     }
@@ -76,14 +66,6 @@ public class zCityDTO {
         this.country_name = country_name;
     }
 
-   /* public boolean isIs_state() {
-        return is_state;
-    }
-
-    public void setIs_state(boolean is_state) {
-        this.is_state = is_state;
-    }*/
-
     public int getState_id() {
         return state_id;
     }
@@ -108,7 +90,15 @@ public class zCityDTO {
         this.state_code = state_code;
     }
 
-    
+    public ZomatoCity(zCityDTO dto){
+        this.id = dto.getId();
+        this.name = dto.getName();
+        this.country_id = dto.getCountry_id();
+        this.country_name = dto.getCountry_name();
+        this.state_id = dto.getState_id();
+        this.state_name = dto.getState_name();
+        this.state_code = dto.getState_code();
+    }
     
     
     

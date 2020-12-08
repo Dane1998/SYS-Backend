@@ -7,6 +7,7 @@ import dto.CategoryDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
  * @author magda
  */
 public class CategoryFetcherTest {
-
+@Disabled
     @Test
     public void getAllCategoriestest() throws IOException {
         ArrayList<CategoryDTO>  list = CategoryFetcher.getAllCategories();
