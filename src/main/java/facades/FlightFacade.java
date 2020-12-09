@@ -67,11 +67,11 @@ public class FlightFacade {
                 double longitude = (double) result[6];
                 FrontAirportDTO airport = new FrontAirportDTO(id, name, code, country, city, latitude, longitude);
                 all.add(airport);
-
             }
         } finally {
             em.close();
         }
+                System.out.println("Items on the list: " +all.size());
 
         return all;
     }
