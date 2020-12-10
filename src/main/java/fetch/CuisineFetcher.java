@@ -36,6 +36,7 @@ public class CuisineFetcher {
 
     private static final String URL = "https://developers.zomato.com/api/v2.1/cuisines";
     private static Gson GSON = new GsonBuilder().create();
+    private static final String ZOMATO_KEY = "b56b72e22de9832e0798ab27cafe6a1a";
 
     public static ArrayList<CuisineDTO> getCuisines(Gson gson, ExecutorService threadPool, String city_id) throws MalformedURLException, IOException, NotFoundException {
         Callable<ArrayList<CuisineDTO>> cuisineTask = new Callable<ArrayList<CuisineDTO>>() {
@@ -73,7 +74,7 @@ public class CuisineFetcher {
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
         con.setRequestProperty("User-Agent", "server");
-        con.setRequestProperty("user-key", "864497503a23e7b6ba474e5159324cc9");
+        con.setRequestProperty("user-key", ZOMATO_KEY);
         Scanner scan = new Scanner(con.getInputStream());
         String jsonStr = null;
         if (scan.hasNext()) {
