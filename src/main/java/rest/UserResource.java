@@ -72,13 +72,13 @@ public class UserResource {
 
     }
     
-//    @Path("all")
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public List<User> getAllMembers() {
-//        List<User> allMembers = USER_FACADE.getAllUsers();
-//        return allMembers;
-//    }
-//   
+    @Path("all")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<User> getAllMembers() {
+        List<User> allMembers = USER_FACADE.getAllUsers();
+        return allMembers;
+    }
+   
     
 }

@@ -46,8 +46,8 @@ public class UserFacade {
         return user;
     }
 
-    public User addUser(String name, String password) throws AuthenticationException{
-         EntityManager em = emf.createEntityManager();
+    public User addUser(String name, String password) throws AuthenticationException {
+        EntityManager em = emf.createEntityManager();
         User user;
         try {
             user = em.find(User.class, name);
@@ -65,16 +65,18 @@ public class UserFacade {
         }
         return user;
     }
-    
-//     public List<User> getAllUsers() {
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            Query query = em.createNamedQuery("User.getAllUsers");
-//            List<User> allUsers = query.getResultList();
-//            return allUsers;
-//        } finally {
-//            em.close();
-//        }
-//    
-//}
+
+    public List<User> getAllUsers() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            // Query query = em.createQuery("SELECT u from users u". User.class);
+
+            List<User> allUsers = em.createQuery("SELECT u.userName from User u", User.class)
+                    .getResultList();
+            return allUsers;
+        } finally {
+            em.close();
+        }
+
+    }
 }

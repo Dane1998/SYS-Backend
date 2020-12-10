@@ -21,7 +21,7 @@ import org.mindrot.jbcrypt.BCrypt;
 @Entity
 @Table(name = "users")
 //@NamedQueries (
-//@NamedQuery(name = "User.getAllUsers", query = "SELECT u FROM Users u")
+//@NamedQuery(name = "User.getAllUsers", query = "SELECT u FROM users u")
 //)
 
 public class User implements Serializable {
