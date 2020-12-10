@@ -66,15 +66,15 @@ public class UserFacade {
         return user;
     }
     
-     public List<User> getAllUsers() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Query query = em.createNamedQuery("User.getAllUsers");
-            List<User> allUsers = query.getResultList();
-            return allUsers;
-        } finally {
-            em.close();
-        }
-    
-}
+//     public List<User> getAllUsers() {
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//            Query query = em.createNamedQuery("User.getAllUsers");
+//            List<User> allUsers = query.getResultList();
+//            return allUsers;
+//        } finally {
+//            em.close();
+//        }
+//    
+//}
 }
