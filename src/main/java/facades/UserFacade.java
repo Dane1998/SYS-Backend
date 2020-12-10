@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import security.errorhandling.AuthenticationException;
+import utils.EMF_Creator;
 
 /**
  * @author lam@cphbusiness.dk
@@ -33,7 +34,11 @@ public class UserFacade {
     }
 
     public User getVeryfiedUser(String username, String password) throws AuthenticationException {
-        EntityManager em = emf.createEntityManager();
+          EntityManager em ;
+try{        em = emf.createEntityManager();}catch (NullPointerException e){
+    emf=EMF_Creator.createEntityManagerFactory();
+    em=emf.createEntityManager();
+}
         User user;
         try {
             user = em.find(User.class, username);

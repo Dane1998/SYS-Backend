@@ -31,7 +31,6 @@ public class EMF_Creator {
     }
 
     private static EntityManagerFactory createEntityManagerFactory(boolean isTest) {
-
         boolean isDeployed = (System.getenv("DEPLOYED") != null);
         if (isDeployed) {
             /* Strategy for deployment */

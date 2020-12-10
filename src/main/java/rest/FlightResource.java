@@ -124,21 +124,19 @@ public class FlightResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("usertrip")
-    public String getTripsByUser(String jsonString) throws API_Exception, AuthenticationException {
+    public String getTripsByUser(String jsonString) throws API_Exception, AuthenticationException, NotFoundException {
         String username = "";
-        String password = "";
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
             username = json.get("username").getAsString();
-            password = json.get("password").getAsString();
 
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
         
-        User user = USER_FACADE.getVeryfiedUser(username, password);
+      //  User user = USER_FACADE.getVeryfiedUser(username, password);
      // User user = new User(username,password);
-        return GSON.toJson(FACADE.getTripsByUser(user));
+        return GSON.toJson(FACADE.getTripsByUser(username));
     }
 
 }

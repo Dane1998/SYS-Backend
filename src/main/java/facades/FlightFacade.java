@@ -32,7 +32,7 @@ public class FlightFacade {
     private static EntityManagerFactory emf;
     private static FlightFacade instance;
     private static final double DEGRE_TO_KM = 111.0;
-    private static  UserFacade USER_FACADE = UserFacade.getUserFacade(emf);
+    private static UserFacade USER_FACADE = UserFacade.getUserFacade(emf);
 
     private FlightFacade() {
 
@@ -111,32 +111,37 @@ public class FlightFacade {
 
     }
 
-    public ArrayList<TripDTO> getTripsByUser(User user) throws AuthenticationException {
+    public ArrayList<TripDTO> getTripsByUser(String userName) throws AuthenticationException, NotFoundException {
         ArrayList<TripDTO> trips = new ArrayList();
         EntityManager em = emf.createEntityManager();
-       
-       // User user = USER_FACADE.getVeryfiedUser(username, password);
-        
+
+        // User user = USER_FACADE.getVeryfiedUser(username, password);
         try {
+            User user = em.find(User.class, userName);
+            if (user == null) {
+                throw new NotFoundException("User does not exist in the system");
+            } else {
+                em.getTransaction().begin();
 
-            em.getTransaction().begin();
-            List<Trip> results = em.createQuery("SELECT t from Trip t where t.user=:user", Trip.class)
-                    .setParameter("user", user)
-                    .getResultList();
-            em.getTransaction().commit();
+                List<Trip> results = em.createQuery("SELECT t from Trip t where t.user=:user", Trip.class)
+                        .setParameter("user", user)
+                        .getResultList();
+                em.getTransaction().commit();
 
-            for (Trip result : results) {
-                trips.add(new TripDTO(result));
+                for (Trip result : results) {
+                    trips.add(new TripDTO(result));
 
+                }
+
+                return trips;
             }
-
-            return trips;
-
-        } finally {
+            }finally {
             em.close();
         }
 
-    }
+        }
+    
+
     
 
     public double calculateRadius(FrontAirportDTO airport, RestaurantDTO restaurant) {
