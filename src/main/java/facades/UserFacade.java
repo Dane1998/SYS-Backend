@@ -2,8 +2,10 @@ package facades;
 
 import entities.Role;
 import entities.User;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import security.errorhandling.AuthenticationException;
 
 /**
@@ -63,4 +65,16 @@ public class UserFacade {
         }
         return user;
     }
+    
+     public List<User> getAllUsers() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query query = em.createNamedQuery("User.getAllUsers");
+            List<User> allUsers = query.getResultList();
+            return allUsers;
+        } finally {
+            em.close();
+        }
+    
+}
 }

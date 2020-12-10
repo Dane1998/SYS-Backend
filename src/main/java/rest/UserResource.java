@@ -9,10 +9,12 @@ import com.google.gson.JsonParser;
 import entities.User;
 import errorhandling.API_Exception;
 import facades.UserFacade;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -68,6 +70,13 @@ public class UserResource {
 
         return Response.ok(new Gson().toJson(responseJson)).build();
 
+    }
+    @Path("all")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<User> getAllMembers() {
+        List<User> allMembers = USER_FACADE.getAllUsers();
+        return allMembers;
     }
    
     
