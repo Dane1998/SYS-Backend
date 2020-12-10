@@ -6,6 +6,9 @@ package dto;
 import java.util.ArrayList;
 import java.util.List;
 import dto.RestaurantDTO;
+import entities.Flight;
+import entities.Restaurant;
+import entities.Trip;
 
 /**
  *
@@ -39,5 +42,16 @@ public class TripDTO {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public TripDTO(Trip trip) {
+        this.username = trip.getUser().getUserName();
+        for (Restaurant restaurant : trip.getRestaurants()) {
+            restaurants.add(new RestaurantDTO(restaurant));
+        }
+        for (Flight flight : trip.getFlights()) {
+            flights.add(new FlightDTO(flight));
+        }
+    }
+    
     
 }

@@ -40,6 +40,7 @@ public class ZomatoFetcher {
     private static final String ZOMATO_KEY_2 = "54348244fce52e40658f0500d58769b0";
     private static final String ZOMATO_KEY_3 = "864497503a23e7b6ba474e5159324cc9";
     private static final String ZOMATO_KEY_4 = "681b99f0fda7721c3a325c4cfb497fe8";
+    private static final String ZOMATO_KEY_5 ="3289e7c251eac0e9d98100281dcc8316";
 
     public static ZomatoFetcher getZomatoFetcher(Gson _gson, ExecutorService _threadPool) {
         if (instance == null) {
@@ -61,7 +62,7 @@ public class ZomatoFetcher {
             con.setRequestMethod("GET");
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("User-Agent", "server");
-            con.setRequestProperty("user-key", ZOMATO_KEY_4);//Use 2 as next ant that's over for today
+            con.setRequestProperty("user-key", ZOMATO_KEY_4);
 
             Scanner scan;
 

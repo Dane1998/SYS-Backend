@@ -26,6 +26,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
 import utils.HttpUtils;
 
@@ -93,7 +94,6 @@ public class FlightResource {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        System.out.println("1: dep: " + depCode + ", arr: " + arrCode + " date: " + date);
         return GSON.toJson(FETCHER.findFlights(depCode, arrCode, date));
     }
 
@@ -114,6 +114,24 @@ public class FlightResource {
         String msg = FACADE.saveTrip(trip);
 
         return "{\"msg\":\"" + msg + "\"}";
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("usertrip")
+    public String getTripsByUser(String jsonString) throws API_Exception, AuthenticationException {
+        String username = "";
+        String password = "";
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            username = json.get("username").getAsString();
+            password = json.get("password").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+        return GSON.toJson(FACADE.getTripsByUser(username, password));
     }
 
 }

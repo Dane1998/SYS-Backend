@@ -74,7 +74,7 @@ public class ZomatoFacade {
         ArrayList<Integer> unusedID = new ArrayList();
         ArrayList<Integer> commonID = new ArrayList();
         int count = 0;
-        for (int i = 5933; i < 6933; i++) {//277
+        for (int i = 9532; i < 10532; i++) {
             count++;
             System.out.println("Counr: " + count);
             ArrayList<zCityDTO> singleResult;
@@ -148,12 +148,13 @@ public class ZomatoFacade {
 
     }
 
-    public static void main(String[] args) throws NotFoundException, IOException {
-
-        System.out.println("----------------------------------------------------");
-        populateZomatoCities();
-
-    }
+//    public static void main(String[] args) throws NotFoundException, IOException {
+//
+//        System.out.println("----------------------------------------------------");
+//        populateZomatoCities();
+//       
+//
+//    }
 
     public ArrayList<zCityDTO> getCitiesByCountry(String country) {
         EntityManager em = emf.createEntityManager();

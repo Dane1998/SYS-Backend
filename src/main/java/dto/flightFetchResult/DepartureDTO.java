@@ -3,14 +3,14 @@
  */
 package dto.flightFetchResult;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import entities.Flight;
 
 /**
  *
  * @author magda
  */
-public class DepartureDTO{
+public class DepartureDTO {
+
     private String airport;
     private String terminal;
     private String gate;
@@ -20,7 +20,17 @@ public class DepartureDTO{
     public DepartureDTO() {
     }
 
-  
+    public DepartureDTO(Flight flight) {
+        this.airport = "No data";
+        this.terminal = flight.getDep_terminal();
+        try {
+            this.gate = flight.getDep_gate();
+        } catch (Exception e) {
+            this.gate = "No data";
+        }
+        this.iata = flight.getDep_code();
+        this.scheduled = flight.getDep_time();
+    }
 
     public String getAqirport() {
         return airport;
@@ -41,7 +51,5 @@ public class DepartureDTO{
     public String getScheduled() {
         return scheduled;
     }
-    
-    
-    
+
 }

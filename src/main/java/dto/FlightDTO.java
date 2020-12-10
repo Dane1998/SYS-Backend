@@ -7,6 +7,9 @@ import dto.flightFetchResult.AirlineDTO;
 import dto.flightFetchResult.ArrivalDTO;
 import dto.flightFetchResult.DepartureDTO;
 import dto.flightFetchResult.LiveDTO;
+import entities.Flight;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 /**
@@ -30,6 +33,25 @@ public class FlightDTO {
         this.arrival = arrival;
         this.airline = airline;
         this.live = live;
+    }
+
+    FlightDTO(Flight flight) {
+        try {
+            this.flight_date = flight.getArr_time().split("T")[0];
+        } catch (Exception e) {
+            this.flight_date = "No data";
+        }
+        this.flight_status = "No data";
+        this.departure = new DepartureDTO(flight);
+        this.arrival = new ArrivalDTO(flight);
+        this.airline = new AirlineDTO(flight.getAirline());
+        this.live = new LiveDTO(setLive());
+    }
+
+    private String setLive() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
+        return formatter.format(date);
     }
 
     public String getFlight_date() {
