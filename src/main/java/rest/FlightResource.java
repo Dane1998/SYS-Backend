@@ -9,9 +9,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dto.FrontAirportDTO;
 import dto.TripDTO;
+import entities.User;
 import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import facades.FlightFacade;
+import facades.UserFacade;
 import fetch.FlightFetcher;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class FlightResource {
     private static FlightFetcher FETCHER = FlightFetcher.getFlightFetcher(GSON, threadPool);
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final FlightFacade FACADE = FlightFacade.getFlightFacade(EMF);
+        public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
+
 
     /**
      * Creates a new instance of FlightResource
@@ -131,7 +135,10 @@ public class FlightResource {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        return GSON.toJson(FACADE.getTripsByUser(username, password));
+        
+        User user = USER_FACADE.getVeryfiedUser(username, password);
+     // User user = new User(username,password);
+        return GSON.toJson(FACADE.getTripsByUser(user));
     }
 
 }

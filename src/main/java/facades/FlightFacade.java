@@ -42,7 +42,6 @@ public class FlightFacade {
         if (instance == null) {
             emf = _emf;
             instance = new FlightFacade();
-            USER_FACADE = UserFacade.getUserFacade(_emf);
         }
         return instance;
     }
@@ -112,11 +111,11 @@ public class FlightFacade {
 
     }
 
-    public ArrayList<TripDTO> getTripsByUser(String username, String password) throws AuthenticationException {
+    public ArrayList<TripDTO> getTripsByUser(User user) throws AuthenticationException {
         ArrayList<TripDTO> trips = new ArrayList();
         EntityManager em = emf.createEntityManager();
        
-        User user = USER_FACADE.getVeryfiedUser(username, password);
+       // User user = USER_FACADE.getVeryfiedUser(username, password);
         
         try {
 
