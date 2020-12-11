@@ -8,7 +8,9 @@ package fetch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.FlightDTO;
+import dto.FlightSetDTO;
 import dto.flightFetchResult.FlightsListDTO;
+import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -47,7 +49,19 @@ public class FlightFetcher {
         return instance;
     }
 
-    public ArrayList<FlightDTO> findFlights( String dep_iata, String arr_iata, String date) throws NotFoundException {
+    public ArrayList<FlightSetDTO> findFlightSets(String dep_iata, String arr_iata, String date, int stops) throws NotFoundException, API_Exception {
+        ArrayList<FlightSetDTO> setList = new ArrayList();
+        ArrayList<FlightDTO> list = findFlights(dep_iata, arr_iata, date);
+        for (FlightDTO flightDTO : list) {
+            FlightSetDTO set = new FlightSetDTO();
+            set.addFlight(flightDTO);
+            set.setID();
+            setList.add(set);
+        }
+        return setList;
+    }
+
+    public ArrayList<FlightDTO> findFlights(String dep_iata, String arr_iata, String date) throws NotFoundException, API_Exception {
 
         Callable<ArrayList<FlightDTO>> flightsTask = new Callable<ArrayList<FlightDTO>>() {
             @Override
@@ -71,6 +85,7 @@ public class FlightFetcher {
                 //set the real date back on flights
                 for (FlightDTO flightDTO : all) {
                     flightDTO.setFlight_date(date);
+                    flightDTO.setID();
                 }
                 return all;
             }
@@ -81,15 +96,17 @@ public class FlightFetcher {
         ArrayList<FlightDTO> result;
         try {
             result = futureFlights.get(5, TimeUnit.SECONDS);
-        } catch (Exception ex) {
+        } catch (Exception ex ) {
             Logger.getLogger(FlightFetcher.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
-            throw new NotFoundException(ex.getMessage());
+            throw new API_Exception(ex.getMessage(), 408);
+
+        
         }
         return result;
     }
 
-    public static String callForFetch(int offset, String dep_iata, String arr_iata, String date) throws IOException, NotFoundException {
+    public static String callForFetch(int offset, String dep_iata, String arr_iata, String date) throws IOException, API_Exception {
         String key = "7749dd3fccb2428159fdfd0710f97584";
         String keyString = "?access_key=" + key;
         String limitString = "&limit=100";
@@ -97,20 +114,22 @@ public class FlightFetcher {
         String statusString = "&flight_status=scheduled";
         String dep_iataString = "&dep_iata=" + dep_iata;
         String arr_iataString = "&arr_iata=" + arr_iata;
+
         String dateString = "&flight_date=" + realDateToAvailableDate(date); // When we can use that option we need to add this string to the URL like the other strings
+
         String _url = URL + "/flights" + keyString + limitString + offsetString + statusString + dep_iataString + arr_iataString;
         String dataString = HttpUtils.fetchData(_url);
 
         return dataString;
     }
 
-    public static String realDateToAvailableDate(String realDateString) throws NotFoundException {
+    public static String realDateToAvailableDate(String realDateString) throws API_Exception {
 
         LocalDate realDate = LocalDate.parse(realDateString);
         LocalDate availableDate;
         LocalDate now = LocalDate.now();
         if (realDate.isBefore(now)) {
-            throw new NotFoundException("No flights available for given date");
+            throw new API_Exception("No data available for flights from before today", 408);
         } else if (realDate.isBefore(now.plusMonths(3))) {
             availableDate = realDate.minusMonths(3);
         } else if (realDate.isBefore(now.plusMonths(6))) {
@@ -120,7 +139,7 @@ public class FlightFetcher {
         } else if (realDate.isBefore(now.plusMonths(12))) {
             availableDate = realDate.minusMonths(12);
         } else {
-            throw new NotFoundException("No flights available for given date");
+            throw new API_Exception("No flights available for given date. Search for flights within one year from today", 408);
 
         }
         return availableDate.toString();

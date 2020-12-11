@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
@@ -49,8 +51,7 @@ public class FlightResource {
     private static FlightFetcher FETCHER = FlightFetcher.getFlightFetcher(GSON, threadPool);
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final FlightFacade FACADE = FlightFacade.getFlightFacade(EMF);
-        public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
-
+    public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
 
     /**
      * Creates a new instance of FlightResource
@@ -83,9 +84,8 @@ public class FlightResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-
     @Path("findflights")
-    public String findFlights(String jsonString) throws NotFoundException, API_Exception {
+    public String findFlights(String jsonString) throws API_Exception, NotFoundException {
         String depCode;
         String arrCode;
         String date;
@@ -98,7 +98,15 @@ public class FlightResource {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        return GSON.toJson(FETCHER.findFlights(depCode, arrCode, date));
+        String result="No flights available for "+date;
+        try {
+            result= GSON.toJson(FETCHER.findFlights(depCode, arrCode, date));
+        } catch (NotFoundException ex) {
+            Logger.getLogger(FlightResource.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NotFoundException(ex.getMessage());
+        //  result=ex.getMessage();
+        }
+        return result;
     }
 
     @POST
@@ -133,10 +141,29 @@ public class FlightResource {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        
-      //  User user = USER_FACADE.getVeryfiedUser(username, password);
-     // User user = new User(username,password);
+
+        //  User user = USER_FACADE.getVeryfiedUser(username, password);
+        // User user = new User(username,password);
         return GSON.toJson(FACADE.getTripsByUser(username));
     }
 
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/flightset")
+    public String findFlightSet(String jsonString) throws NotFoundException, API_Exception {
+        String depCode;
+        String arrCode;
+        String date;
+        System.out.println("Request body: "+jsonString);
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            depCode = json.get("dep_code").getAsString();
+            arrCode = json.get("arr_code").getAsString();
+            date = json.get("date").getAsString();
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+        return GSON.toJson(FETCHER.findFlightSets(depCode, arrCode, date, 0));
+    }
 }
