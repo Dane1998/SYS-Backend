@@ -52,4 +52,8 @@ public class DepartureDTO {
         return scheduled;
     }
 
+    public void setScheduled(String scheduled) {
+        this.scheduled = scheduled;
+    }
+
 }

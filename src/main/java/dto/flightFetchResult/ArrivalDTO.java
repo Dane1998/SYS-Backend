@@ -33,6 +33,10 @@ public class ArrivalDTO {
         this.scheduled = flight.getArr_time();
     }
 
+    public void setScheduled(String scheduled) {
+        this.scheduled = scheduled;
+    }
+
    
 
    

@@ -32,6 +32,20 @@ public class FlightSetDTO {
     public void addFlight(FlightDTO flight){
         flights.add(flight);
     }
+
+    @Override
+    public String toString() {
+        String string="Set ID: "+id+", flights: {";
+        for (FlightDTO flight : flights) {
+            string+="\n"+flight.toString();
+        }
+        string+="}\n";
+                
+        
+        return string;
+    }
+    
+    
     
     
     

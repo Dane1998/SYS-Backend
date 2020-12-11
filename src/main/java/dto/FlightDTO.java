@@ -25,7 +25,7 @@ public class FlightDTO {
     private AirlineDTO airline;
     private LiveDTO live;
     private FlightData flight;
-    private String id ;
+    private String id;
 
     public FlightDTO(String flight_date, String flight_status, DepartureDTO departure, ArrivalDTO arrival, AirlineDTO airline, LiveDTO live) {
 
@@ -55,8 +55,9 @@ public class FlightDTO {
         Date date = new Date(System.currentTimeMillis());
         return formatter.format(date);
     }
-    public void setID(){
-        id=flight.getIata();
+
+    public void setID() {
+        id = flight.getIata();
     }
 
     public String getFlight_date() {
@@ -89,7 +90,7 @@ public class FlightDTO {
 
     @Override
     public String toString() {
-        return "FlightDTO{" + "flight_date=" + flight_date + ", flight_status=" + flight_status + ", departure=" + departure + ", arrival=" + arrival + ", airline=" + airline + ", live=" + live + ", flight=" + flight + ", id=" + id + '}';
+        return "FlightDTO{" + "flight_date=" + flight_date + ", departure=" + departure + ", arrival=" + arrival + ", airline=" + airline + ", flight=" + flight.getIata() + ", id=" + id + '}';
     }
 
     public FlightData getFlight() {
@@ -99,8 +100,6 @@ public class FlightDTO {
     public String getId() {
         return id;
     }
-
-    
 
     @Override
     public int hashCode() {
@@ -139,11 +138,13 @@ public class FlightDTO {
     }
 
 }
-class FlightData{
+
+class FlightData {
+
     private String iata;
 
     public String getIata() {
         return iata;
     }
-    
+
 }

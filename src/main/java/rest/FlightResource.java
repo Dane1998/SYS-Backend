@@ -164,6 +164,27 @@ public class FlightResource {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        return GSON.toJson(FETCHER.findFlightSets(depCode, arrCode, date, 0));
+        return GSON.toJson(FETCHER.setFLights(depCode, arrCode, date));
+    }
+    
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/xxx")
+    public String findFlightSetXXX(String jsonString) throws NotFoundException, API_Exception {
+        String depCode;
+        String arrCode;
+        String date;
+        System.out.println("Request body: "+jsonString);
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            depCode = json.get("dep_code").getAsString();
+            arrCode = json.get("arr_code").getAsString();
+            date = json.get("date").getAsString();
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+        return GSON.toJson(FETCHER.setFLights(depCode, arrCode, date));
     }
 }
