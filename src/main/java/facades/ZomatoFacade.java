@@ -74,7 +74,7 @@ public class ZomatoFacade {
         ArrayList<Integer> unusedID = new ArrayList();
         ArrayList<Integer> commonID = new ArrayList();
         int count = 0;
-        for (int i = 9532; i < 10532; i++) {
+        for (int i =  14072; i < 14073; i++) { //start from 1472
             count++;
             System.out.println("Counr: " + count);
             ArrayList<zCityDTO> singleResult;
@@ -108,6 +108,14 @@ public class ZomatoFacade {
         System.out.println("All cities scrapped: " + cities.size());
 
         return cities;
+    }
+    
+      public static void main(String[] args) throws NotFoundException, IOException {
+
+        System.out.println("----------------------------------------------------");
+        populateZomatoCities();
+       
+
     }
 
     private static void populateZomatoCities() throws NotFoundException {
@@ -148,13 +156,7 @@ public class ZomatoFacade {
 
     }
 
-//    public static void main(String[] args) throws NotFoundException, IOException {
-//
-//        System.out.println("----------------------------------------------------");
-//        populateZomatoCities();
-//       
-//
-//    }
+  
 
     public ArrayList<zCityDTO> getCitiesByCountry(String country) {
         EntityManager em = emf.createEntityManager();
